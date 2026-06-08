@@ -1,4 +1,4 @@
-This version is archived.
+⚠️ This version is archived.
 The new version is here: [link]
 # KaliDroid 
 
