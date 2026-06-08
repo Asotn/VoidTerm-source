@@ -1,3 +1,5 @@
+This version is archived.
+The new version is here: [link]
 # KaliDroid 
 
 **Kali Linux Terminal for Android**
