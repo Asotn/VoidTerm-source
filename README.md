@@ -1,5 +1,9 @@
-# KaliDroid 
-**Kali Linux Terminal for Android**
+Note: The project officially ended on [date]. 
+"Jun-8" I saw the entire warehouse on [date]. "Jun 9"
+Updates from the developer have been permanently 
+discontinued. Continued viewing of the Redmi 
+
+# KaliDroid **Kali Linux Terminal for Android**
 A real, open-source Kali Linux terminal emulator for Android. Runs the full Kali Linux environment via proot — no root required. Supports `apt`, `sudo`, and every terminal command in the world.
 
 | | |
