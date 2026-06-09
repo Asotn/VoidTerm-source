@@ -38,7 +38,7 @@ KaliDroid is not a fake terminal. It is a real application with:
  |_|\_\__,_|_|_|____/|_|  \___/|_|\__,_|
 
   Kali Linux Terminal for Android
-  Developer : github.com/Rotlqe  |  s.pi@outlook.sa
+  Developer : github.com/KaraAixm/KaliDroid  |  s.pi@outlook.sa
   Version   : 1.0.0  |  License: GPL-3.0
   Type kalidroid-help for usage, or start with apt install
 ```
@@ -243,7 +243,7 @@ KaliDroid is built to be fully F-Droid compatible:
 
 Pull requests are welcome. Please follow the existing code style and include tests where applicable.
 
-**Issues:** https://github.com/Rotlqe/KaliDroid/issues
+**Issues:** https://github.com/KaraAixm/KaliDroid/KaliDroid/issues
 
 ---
 
