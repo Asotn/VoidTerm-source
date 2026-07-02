@@ -1,8 +1,8 @@
 /*
- * KaliDroid - Process Runner
+ * VoidTerm - Process Runner
  * Executes shell processes, manages environment, handles exit status.
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
@@ -15,7 +15,7 @@
 #include <sys/wait.h>
 #include <android/log.h>
 
-#define LOG_TAG "KaliDroid-Proc"
+#define LOG_TAG "VoidTerm-Proc"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,  LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 

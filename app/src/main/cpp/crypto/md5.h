@@ -1,6 +1,6 @@
 /*
- * KaliDroid - MD5 Header
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * VoidTerm - MD5 Header
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  */
 #ifndef MD5_H
 #define MD5_H

@@ -1,0 +1,65 @@
+# VoidTerm - F-Droid Metadata
+# Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
+# License   : GPL-3.0
+
+Categories:
+  - System
+  - Security
+
+License: GPL-3.0-only
+
+WebSite: https://github.com/Asotn/VoidTerm-source
+SourceCode: https://github.com/Asotn/VoidTerm-source
+IssueTracker: https://github.com/Asotn/VoidTerm-source/issues
+
+Name: VoidTerm
+AutoName: VoidTerm
+
+Summary: Kali Linux terminal with apt/sudo for Android
+
+Description: |-
+  VoidTerm is a real Kali Linux terminal emulator for Android. It runs
+  a full Kali Linux environment via proot — no root required — giving you
+  access to the complete Kali package repository directly on your device.
+
+  **Features:**
+
+  * Real PTY-backed bash shell (not a fake terminal)
+  * Full apt-get / apt / sudo support
+  * Access to all Kali Linux rolling repositories
+  * Background download notifications — see download progress from any app
+  * ./files -0 & permission command to grant storage access instantly
+  * Command history, aliases, tab-completion (via bash)
+  * Settings: font size, mirror selection, keep screen on
+  * Pure black terminal UI, no extra colors or clutter
+  * Built with C/C++ (PTY/VT100 engine), Java, and shell scripts
+  * GPL-3.0 licensed — fully open source
+  * F-Droid ready — no proprietary dependencies, no trackers, no ads
+
+  **First run:**
+  The app downloads the Kali NetHunter minimal rootfs (~200-500 MB) on
+  first launch. After that, run `apt-get update` then install any tool.
+
+  **Developer:** Asotn
+  https://github.com/Asotn | s.pi@outlook.sa
+
+RepoType: git
+Repo: https://github.com/Asotn/VoidTerm-source
+
+Builds:
+  - versionName: 26.2
+    versionCode: 2
+    commit: v26.2
+    subdir: app
+    gradle:
+      - release
+    ndk: 26.3.11579264
+    buildjni:
+      - .
+    gradleprops:
+      - org.gradle.jvmargs=-Xmx2048m
+
+AutoUpdateMode: Version v%v
+UpdateCheckMode: Tags
+CurrentVersion: 26.2
+CurrentVersionCode: 2

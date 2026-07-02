@@ -1,6 +1,6 @@
 /*
- * KaliDroid - Process Runner Header
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * VoidTerm - Process Runner Header
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  */
 
 #ifndef PROCESS_RUNNER_H

@@ -1,13 +1,13 @@
 #!/bin/bash
-# KaliDroid - Kali Linux Environment Full Setup Script
+# VoidTerm - Kali Linux Environment Full Setup Script
 # Runs inside the proot Kali environment after first-time bootstrap.
 # Sets up: locales, apt config, SSH, Python, common tools baseline.
 #
-# Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+# Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
 # License   : GPL-3.0
 
 set -e
-LOG_FILE="/var/log/kalidroid_setup.log"
+LOG_FILE="/var/log/voidterm_setup.log"
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 
 # -------------------------------------------------------------------------
@@ -23,8 +23,8 @@ log_step()  { echo "" | tee -a "$LOG_FILE"; echo "==> $*" | tee -a "$LOG_FILE"; 
 # Header
 # -------------------------------------------------------------------------
 echo "============================================================"
-echo " KaliDroid Environment Setup"
-echo " Developer: Rotlqe | github.com/Rotlqe | s.pi@outlook.sa"
+echo " VoidTerm Environment Setup"
+echo " Developer: Asotn | github.com/Asotn | s.pi@outlook.sa"
 echo " Started: $TIMESTAMP"
 echo "============================================================"
 echo "" | tee -a "$LOG_FILE"
@@ -121,7 +121,7 @@ log_ok "Locales configured"
 # -------------------------------------------------------------------------
 log_step "Configuring bash shell"
 cat > /root/.bashrc << 'BASHRC'
-# KaliDroid .bashrc - Rotlqe | github.com/Rotlqe
+# VoidTerm .bashrc - Asotn | github.com/Asotn
 
 # Prompt: root@kali:~/path#
 PS1='\[\033[01;31m\]root\[\033[00m\]@\[\033[01;32m\]kali\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
@@ -187,10 +187,10 @@ alias cpuinfo='lscpu'
 alias py='python3'
 alias pip='pip3'
 
-# KaliDroid info
+# VoidTerm info
 alias kali-version='cat /etc/os-release'
-alias kali-tools='echo "Run: kalidroid-help for tool listing"'
-alias about='echo "KaliDroid | Developer: Rotlqe | github.com/Rotlqe | s.pi@outlook.sa"'
+alias kali-tools='echo "Run: voidterm-help for tool listing"'
+alias about='echo "VoidTerm | Developer: Asotn | github.com/Asotn | s.pi@outlook.sa"'
 
 # Enable bash completion
 if [ -f /etc/bash_completion ]; then
@@ -199,8 +199,8 @@ fi
 
 # Welcome message
 echo ""
-echo "  KaliDroid - Kali Linux Terminal"
-echo "  Developer: Rotlqe | github.com/Rotlqe"
+echo "  VoidTerm - Kali Linux Terminal"
+echo "  Developer: Asotn | github.com/Asotn"
 echo "  Type 'about' for info | 'install <pkg>' to add tools"
 echo ""
 BASHRC
@@ -241,7 +241,7 @@ log_ok "SSH client configured"
 # -------------------------------------------------------------------------
 log_step "Configuring tmux"
 cat > /root/.tmux.conf << 'EOF'
-# KaliDroid tmux config
+# VoidTerm tmux config
 set -g default-terminal "xterm-256color"
 set -g history-limit 10000
 set -g mouse on
@@ -249,7 +249,7 @@ set -g base-index 1
 set -g pane-base-index 1
 set -g status-bg black
 set -g status-fg green
-set -g status-left "[KaliDroid] "
+set -g status-left "[VoidTerm] "
 set -g status-right "%H:%M %d-%b-%y"
 bind r source-file ~/.tmux.conf \; display "Config reloaded"
 EOF
@@ -285,7 +285,7 @@ mkdir -p /usr/share/wordlists
 
 # Create a README
 cat > /root/README.txt << 'REOF'
-KaliDroid Workspace
+VoidTerm Workspace
 ===================
 tools/      - Downloaded/compiled tools
 wordlists/  - Password and wordlist files
@@ -300,7 +300,7 @@ Common commands:
   apt-cache search <term>      Search for packages
   about                        Show developer info
 
-Developer: Rotlqe | github.com/Rotlqe | s.pi@outlook.sa
+Developer: Asotn | github.com/Asotn | s.pi@outlook.sa
 REOF
 
 log_ok "Workspace directories created"
@@ -311,12 +311,12 @@ log_ok "Workspace directories created"
 log_step "Setup complete"
 echo ""
 echo "============================================================"
-echo " KaliDroid environment setup COMPLETE"
+echo " VoidTerm environment setup COMPLETE"
 echo " $(date '+%Y-%m-%d %H:%M:%S')"
 echo ""
 echo " Run 'apt-get install <tool>' to install Kali tools"
 echo " Run 'source ~/.bashrc' to reload shell config"
 echo ""
-echo " Developer: Rotlqe | github.com/Rotlqe | s.pi@outlook.sa"
+echo " Developer: Asotn | github.com/Asotn | s.pi@outlook.sa"
 echo "============================================================"
 echo ""

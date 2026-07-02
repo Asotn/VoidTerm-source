@@ -1,6 +1,6 @@
 /*
- * KaliDroid - Filesystem Utils Header
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * VoidTerm - Filesystem Utils Header
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  */
 #ifndef FS_UTILS_H
 #define FS_UTILS_H

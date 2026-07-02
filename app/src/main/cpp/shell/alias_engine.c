@@ -1,8 +1,8 @@
 /*
- * KaliDroid - Alias Engine
+ * VoidTerm - Alias Engine
  * Stores and expands shell aliases (e.g., alias ll='ls -la').
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <android/log.h>
 
-#define LOG_TAG  "KaliDroid-Alias"
+#define LOG_TAG  "VoidTerm-Alias"
 #define MAX_ALIASES 128
 
 typedef struct {

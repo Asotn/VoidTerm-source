@@ -1,10 +1,10 @@
 /*
- * KaliDroid - Permission Helper
+ * VoidTerm - Permission Helper
  * Checks and reports on file/directory permissions from the native layer.
  * The actual Android runtime permissions are requested in Java;
  * this layer checks the filesystem-level access we actually have.
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
@@ -14,7 +14,7 @@
 #include <string.h>
 #include <android/log.h>
 
-#define LOG_TAG "KaliDroid-Perm"
+#define LOG_TAG "VoidTerm-Perm"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 
 // -------------------------------------------------------------------------
@@ -70,7 +70,10 @@ int perm_get_mode_string(const char *path, char out[11]) {
 int perm_make_executable(const char *path) {
     struct stat st;
     if (stat(path, &st) != 0) return -1;
-    return chmod(path, st.st_mode | S_IXUSR | S_IXGRP | S_IXOTH);
+    // Only grant execute to owner and group — avoid making files
+    // world-executable, which would let any other app/process on a
+    // multi-user or shared filesystem execute them.
+    return chmod(path, st.st_mode | S_IXUSR | S_IXGRP);
 }
 
 // -------------------------------------------------------------------------

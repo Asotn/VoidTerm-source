@@ -1,8 +1,8 @@
-# Building KaliDroid from Source
+# Building VoidTerm from Source
 
-Complete instructions for building the KaliDroid APK from source.
+Complete instructions for building the VoidTerm APK from source.
 
-**Developer:** Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+**Developer:** Asotn | https://github.com/Asotn | s.pi@outlook.sa
 
 ---
 
@@ -22,8 +22,8 @@ Complete instructions for building the KaliDroid APK from source.
 ## Step 1 — Clone the repository
 
 ```bash
-git clone https://github.com/Rotlqe/KaliDroid.git
-cd KaliDroid
+git clone https://github.com/Asotn/VoidTerm-source.git
+cd VoidTerm
 ```
 
 ---
@@ -50,7 +50,7 @@ $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager \
 
 ## Step 3 — Add required binary assets
 
-KaliDroid requires statically compiled **proot** and **busybox** binaries
+VoidTerm requires statically compiled **proot** and **busybox** binaries
 for each target ABI. These are not included in the repository.
 
 Place them at:
@@ -113,26 +113,26 @@ Output: `app/build/outputs/apk/release/app-release-unsigned.apk`
 ```bash
 # 1. Create a keystore (one time only)
 keytool -genkey -v \
-  -keystore kalidroid-release.jks \
-  -alias kalidroid \
+  -keystore voidterm-release.jks \
+  -alias voidterm \
   -keyalg RSA \
   -keysize 4096 \
   -validity 10000 \
   -storepass yourpassword \
   -keypass yourpassword \
-  -dname "CN=Rotlqe, OU=KaliDroid, O=Rotlqe, L=Unknown, S=Unknown, C=US"
+  -dname "CN=Asotn, OU=VoidTerm, O=Asotn, L=Unknown, S=Unknown, C=US"
 
 # 2. Sign the APK
 apksigner sign \
-  --ks kalidroid-release.jks \
-  --ks-key-alias kalidroid \
+  --ks voidterm-release.jks \
+  --ks-key-alias voidterm \
   --ks-pass pass:yourpassword \
   --key-pass pass:yourpassword \
-  --out kalidroid-release-signed.apk \
+  --out voidterm-release-signed.apk \
   app/build/outputs/apk/release/app-release-unsigned.apk
 
 # 3. Verify
-apksigner verify --verbose kalidroid-release-signed.apk
+apksigner verify --verbose voidterm-release-signed.apk
 ```
 
 ---
@@ -140,7 +140,7 @@ apksigner verify --verbose kalidroid-release-signed.apk
 ## Step 6 — Install on device
 
 ```bash
-adb install -r kalidroid-release-signed.apk
+adb install -r voidterm-release-signed.apk
 ```
 
 Or sideload: copy the APK to the device and open it in Files.
@@ -150,7 +150,7 @@ Or sideload: copy the APK to the device and open it in Files.
 ## Building with Android Studio (GUI)
 
 1. Open Android Studio
-2. File → Open → select the `KaliDroid` directory
+2. File → Open → select the `VoidTerm` directory
 3. Wait for Gradle sync to complete
 4. Place the binary assets as described in Step 3
 5. Build → Make Project (`Ctrl+F9`)
@@ -161,7 +161,7 @@ Or sideload: copy the APK to the device and open it in Files.
 
 ## F-Droid build
 
-KaliDroid is ready for F-Droid. The build recipe is in `metadata/com.rotlqe.kalidroid/en-US.yml`.
+VoidTerm is ready for F-Droid. The build recipe is in `metadata/com.asotn.voidterm/en-US.yml`.
 
 F-Droid builds with:
 ```yaml
@@ -190,7 +190,7 @@ Ensure CMake 3.22.1 is installed via SDK Manager, not the system CMake.
 
 ### "Cannot find proot" at runtime
 The app looks for `proot` in `<filesDir>/bin/proot`. Ensure the binary was
-extracted from assets correctly. Check logcat for `KaliDroid-Env` tag.
+extracted from assets correctly. Check logcat for `VoidTerm-Env` tag.
 
 ### Build fails with "Unsupported class file major version"
 You are using a JDK newer than 17. Switch to JDK 17:
@@ -204,7 +204,7 @@ export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 ## Project structure overview
 
 ```
-KaliDroid/
+VoidTerm/
 ├── app/src/main/
 │   ├── cpp/              Native C/C++ engine (PTY, APT, crypto, net, fs)
 │   ├── java/             Java layer (Activities, Services, Engine wrappers)
@@ -218,5 +218,5 @@ KaliDroid/
 
 ---
 
-*Questions or issues? Open an issue at https://github.com/Rotlqe/KaliDroid/issues*
+*Questions or issues? Open an issue at https://github.com/Asotn/VoidTerm-source/issues*
 *Email: s.pi@outlook.sa*

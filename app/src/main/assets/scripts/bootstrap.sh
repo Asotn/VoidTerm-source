@@ -1,15 +1,15 @@
 #!/bin/sh
-# KaliDroid Bootstrap Script
+# VoidTerm Bootstrap Script
 # Sets up the Kali Linux environment after rootfs extraction.
 # Runs inside proot as root.
 #
-# Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+# Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
 # License   : GPL-3.0
 
 set -e
 
 log() {
-    echo "[KaliDroid] $1"
+    echo "[VoidTerm] $1"
 }
 
 log "Starting Kali environment bootstrap..."
@@ -47,7 +47,7 @@ EOF
 
 # Disable recommended/suggested package auto-install for speed
 mkdir -p /etc/apt/apt.conf.d
-cat > /etc/apt/apt.conf.d/99kalidroid << 'EOF'
+cat > /etc/apt/apt.conf.d/99voidterm << 'EOF'
 APT::Install-Recommends "false";
 APT::Install-Suggests "false";
 Dpkg::Options:: "--force-confnew";
@@ -62,11 +62,11 @@ TERM=xterm-256color
 DEBIAN_FRONTEND=noninteractive
 EOF
 
-# Create root .bashrc with KaliDroid prompt
+# Create root .bashrc with VoidTerm prompt
 log "Configuring bash..."
 cat > /root/.bashrc << 'BASHRC'
-# KaliDroid bash configuration
-# Developer: Rotlqe | https://github.com/Rotlqe
+# VoidTerm bash configuration
+# Developer: Asotn | https://github.com/Asotn
 
 export PS1="\[\033[01;31m\]root@kali\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]# "
 export TERM=xterm-256color
@@ -90,8 +90,8 @@ alias install='apt-get install -y'
 alias search='apt-cache search'
 alias purge='apt-get autoremove --purge -y'
 
-# KaliDroid helper
-alias kali-help='echo "KaliDroid Terminal | github.com/Rotlqe | s.pi@outlook.sa"'
+# VoidTerm helper
+alias kali-help='echo "VoidTerm Terminal | github.com/Asotn | s.pi@outlook.sa"'
 BASHRC
 
 # Create root .profile
@@ -107,6 +107,6 @@ log "Bootstrap complete."
 log "Run 'apt-get update' to refresh package lists."
 log "Then 'apt-get install <package>' to install tools."
 echo ""
-echo "Welcome to KaliDroid - Kali Linux on Android"
-echo "Developer: github.com/Rotlqe | s.pi@outlook.sa"
+echo "Welcome to VoidTerm - Kali Linux on Android"
+echo "Developer: github.com/Asotn | s.pi@outlook.sa"
 echo ""

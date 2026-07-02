@@ -1,8 +1,8 @@
 /*
- * KaliDroid - I/O Ring Buffer
+ * VoidTerm - I/O Ring Buffer
  * Lock-free ring buffer for PTY read/write buffering.
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 

@@ -1,21 +1,22 @@
 /*
- * KaliDroid - dpkg Helper
+ * VoidTerm - dpkg Helper
  * Queries the dpkg package database inside the Kali rootfs.
  * Provides package status, version, installed file list, etc.
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
 #include "dpkg_helper.h"
 #include "../terminal/process_runner.h"
 #include "../fs/fs_utils.h"
+#include "../shell/shell_quote.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <android/log.h>
 
-#define LOG_TAG "KaliDroid-dpkg"
+#define LOG_TAG "VoidTerm-dpkg"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,  LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
@@ -46,6 +47,7 @@ static int dpkg_run(const char *args, char *out, size_t out_size) {
 // -------------------------------------------------------------------------
 int dpkg_is_installed(const char *pkg_name) {
     if (!pkg_name) return 0;
+    if (!shell_is_safe_token(pkg_name)) return 0;
     char args[512];
     snprintf(args, sizeof(args), "-l %s 2>/dev/null | grep -q '^ii'", pkg_name);
     char out[64] = {0};
@@ -60,6 +62,7 @@ int dpkg_is_installed(const char *pkg_name) {
 // -------------------------------------------------------------------------
 int dpkg_get_version(const char *pkg_name, char *version_buf, size_t buf_size) {
     if (!pkg_name || !version_buf) return -1;
+    if (!shell_is_safe_token(pkg_name)) return -1;
     char args[512];
     snprintf(args, sizeof(args), "-s %s 2>/dev/null | grep '^Version:' | cut -d' ' -f2", pkg_name);
     char out[256] = {0};
@@ -81,6 +84,7 @@ int dpkg_get_version(const char *pkg_name, char *version_buf, size_t buf_size) {
 // -------------------------------------------------------------------------
 int dpkg_get_status(const char *pkg_name, dpkg_status_t *status) {
     if (!pkg_name || !status) return -1;
+    if (!shell_is_safe_token(pkg_name)) return -1;
     *status = DPKG_STATUS_UNKNOWN;
 
     char args[512];
@@ -128,6 +132,7 @@ int dpkg_get_installed_count(void) {
 // -------------------------------------------------------------------------
 int dpkg_get_files(const char *pkg_name, char *buf, size_t buf_size) {
     if (!pkg_name || !buf) return -1;
+    if (!shell_is_safe_token(pkg_name)) return -1;
     char args[512];
     snprintf(args, sizeof(args), "-L %s 2>/dev/null", pkg_name);
     return dpkg_run(args, buf, buf_size);
@@ -139,6 +144,7 @@ int dpkg_get_files(const char *pkg_name, char *buf, size_t buf_size) {
 // -------------------------------------------------------------------------
 int dpkg_reconfigure(const char *pkg_name, char *out, size_t out_size) {
     if (!pkg_name) return -1;
+    if (!shell_is_safe_token(pkg_name)) return -1;
     char cmd[512];
     snprintf(cmd, sizeof(cmd),
         "DEBIAN_FRONTEND=noninteractive dpkg-reconfigure %s", pkg_name);

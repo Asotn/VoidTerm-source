@@ -1,8 +1,8 @@
 /*
- * KaliDroid - Filesystem Utilities
+ * VoidTerm - Filesystem Utilities
  * Helper functions for file/directory operations used by the app and package engine.
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
@@ -18,7 +18,7 @@
 #include <sys/types.h>
 #include <android/log.h>
 
-#define LOG_TAG "KaliDroid-FS"
+#define LOG_TAG "VoidTerm-FS"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,  LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 

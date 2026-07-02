@@ -1,8 +1,8 @@
 /*
- * KaliDroid - Filesystem JNI
+ * VoidTerm - Filesystem JNI
  * JNI bindings for fs_utils, path_resolver, permission_helper.
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
@@ -14,7 +14,7 @@
 #include "../fs/permission_helper.h"
 #include "../crypto/sha256.h"
 
-#define LOG_TAG "KaliDroid-FsJNI"
+#define LOG_TAG "VoidTerm-FsJNI"
 
 static std::string jstr2std(JNIEnv *env, jstring js) {
     if (!js) return "";
@@ -29,7 +29,7 @@ static std::string jstr2std(JNIEnv *env, jstring js) {
 // =========================================================================
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_rotlqe_kalidroid_utils_NativeFs_nativePathResolverInit(
+Java_com_asotn_voidterm_utils_NativeFs_nativePathResolverInit(
         JNIEnv *env, jclass, jstring rootfs, jstring home, jstring sdcard) {
     path_resolver_init(jstr2std(env, rootfs).c_str(),
                        jstr2std(env, home).c_str(),
@@ -37,7 +37,7 @@ Java_com_rotlqe_kalidroid_utils_NativeFs_nativePathResolverInit(
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_rotlqe_kalidroid_utils_NativeFs_nativeGuestToHost(
+Java_com_asotn_voidterm_utils_NativeFs_nativeGuestToHost(
         JNIEnv *env, jclass, jstring guestPath) {
     char out[1024] = {0};
     path_guest_to_host(jstr2std(env, guestPath).c_str(), out, sizeof(out));
@@ -45,7 +45,7 @@ Java_com_rotlqe_kalidroid_utils_NativeFs_nativeGuestToHost(
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_rotlqe_kalidroid_utils_NativeFs_nativePathJoin(
+Java_com_asotn_voidterm_utils_NativeFs_nativePathJoin(
         JNIEnv *env, jclass, jstring base, jstring rel) {
     char out[1024] = {0};
     path_join(jstr2std(env, base).c_str(),
@@ -59,37 +59,37 @@ Java_com_rotlqe_kalidroid_utils_NativeFs_nativePathJoin(
 // =========================================================================
 
 extern "C" JNIEXPORT jboolean JNICALL
-Java_com_rotlqe_kalidroid_utils_NativeFs_nativeExists(
+Java_com_asotn_voidterm_utils_NativeFs_nativeExists(
         JNIEnv *env, jclass, jstring path) {
     return (jboolean)fs_exists(jstr2std(env, path).c_str());
 }
 
 extern "C" JNIEXPORT jlong JNICALL
-Java_com_rotlqe_kalidroid_utils_NativeFs_nativeFileSize(
+Java_com_asotn_voidterm_utils_NativeFs_nativeFileSize(
         JNIEnv *env, jclass, jstring path) {
     return (jlong)fs_file_size(jstr2std(env, path).c_str());
 }
 
 extern "C" JNIEXPORT jlong JNICALL
-Java_com_rotlqe_kalidroid_utils_NativeFs_nativeFreeSpace(
+Java_com_asotn_voidterm_utils_NativeFs_nativeFreeSpace(
         JNIEnv *env, jclass, jstring path) {
     return (jlong)fs_get_free_space(jstr2std(env, path).c_str());
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
-Java_com_rotlqe_kalidroid_utils_NativeFs_nativeMkdirs(
+Java_com_asotn_voidterm_utils_NativeFs_nativeMkdirs(
         JNIEnv *env, jclass, jstring path) {
     return (jboolean)(fs_mkdirs(jstr2std(env, path).c_str(), 0755) == 0);
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
-Java_com_rotlqe_kalidroid_utils_NativeFs_nativeDeleteFile(
+Java_com_asotn_voidterm_utils_NativeFs_nativeDeleteFile(
         JNIEnv *env, jclass, jstring path) {
     return (jboolean)(fs_delete_file(jstr2std(env, path).c_str()) == 0);
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
-Java_com_rotlqe_kalidroid_utils_NativeFs_nativeDeleteDirRecursive(
+Java_com_asotn_voidterm_utils_NativeFs_nativeDeleteDirRecursive(
         JNIEnv *env, jclass, jstring path) {
     return (jboolean)(fs_delete_dir_recursive(jstr2std(env, path).c_str()) == 0);
 }
@@ -99,31 +99,31 @@ Java_com_rotlqe_kalidroid_utils_NativeFs_nativeDeleteDirRecursive(
 // =========================================================================
 
 extern "C" JNIEXPORT jboolean JNICALL
-Java_com_rotlqe_kalidroid_utils_NativeFs_nativeCanRead(
+Java_com_asotn_voidterm_utils_NativeFs_nativeCanRead(
         JNIEnv *env, jclass, jstring path) {
     return (jboolean)perm_can_read(jstr2std(env, path).c_str());
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
-Java_com_rotlqe_kalidroid_utils_NativeFs_nativeCanWrite(
+Java_com_asotn_voidterm_utils_NativeFs_nativeCanWrite(
         JNIEnv *env, jclass, jstring path) {
     return (jboolean)perm_can_write(jstr2std(env, path).c_str());
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
-Java_com_rotlqe_kalidroid_utils_NativeFs_nativeSdcardReadable(
+Java_com_asotn_voidterm_utils_NativeFs_nativeSdcardReadable(
         JNIEnv *, jclass) {
     return (jboolean)perm_check_sdcard();
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
-Java_com_rotlqe_kalidroid_utils_NativeFs_nativeSdcardWritable(
+Java_com_asotn_voidterm_utils_NativeFs_nativeSdcardWritable(
         JNIEnv *, jclass) {
     return (jboolean)perm_check_sdcard_write();
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_rotlqe_kalidroid_utils_NativeFs_nativeGetModeString(
+Java_com_asotn_voidterm_utils_NativeFs_nativeGetModeString(
         JNIEnv *env, jclass, jstring path) {
     char mode[11] = {0};
     perm_get_mode_string(jstr2std(env, path).c_str(), mode);
@@ -135,7 +135,7 @@ Java_com_rotlqe_kalidroid_utils_NativeFs_nativeGetModeString(
 // =========================================================================
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_rotlqe_kalidroid_utils_NativeFs_nativeSha256File(
+Java_com_asotn_voidterm_utils_NativeFs_nativeSha256File(
         JNIEnv *env, jclass, jstring path) {
     char hex[65] = {0};
     sha256_file(jstr2std(env, path).c_str(), hex);
@@ -143,7 +143,7 @@ Java_com_rotlqe_kalidroid_utils_NativeFs_nativeSha256File(
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
-Java_com_rotlqe_kalidroid_utils_NativeFs_nativeSha256Verify(
+Java_com_asotn_voidterm_utils_NativeFs_nativeSha256Verify(
         JNIEnv *env, jclass, jstring path, jstring expected) {
     int r = sha256_verify_file(jstr2std(env, path).c_str(),
                                 jstr2std(env, expected).c_str());

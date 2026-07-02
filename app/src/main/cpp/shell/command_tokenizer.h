@@ -1,6 +1,6 @@
 /*
- * KaliDroid - Command Tokenizer Header
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * VoidTerm - Command Tokenizer Header
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  */
 
 #ifndef COMMAND_TOKENIZER_H

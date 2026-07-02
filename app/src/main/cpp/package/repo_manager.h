@@ -1,6 +1,6 @@
 /*
- * KaliDroid - Repo Manager Header
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * VoidTerm - Repo Manager Header
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  */
 #ifndef REPO_MANAGER_H
 #define REPO_MANAGER_H

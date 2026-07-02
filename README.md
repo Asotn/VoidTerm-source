@@ -1,16 +1,15 @@
-Hello, the project was archived but has been unarchived and updated. The next version of Calidroid will change many things, and we have rebuilt it. In a few days, the second alert will be issued, and the name will be changed. 
-The new developer of the warehouse is Asotn
-And it was dated 2027/1/1 The warehouse is being transferred to the institution. en.ag
+# VoidTerm 
 
-After the ownership of the warehouse was transferred 
+**Kali Linux Terminal for Android**
 
-# KaliDroid **Kali Linux Terminal for Android**
 A real, open-source Kali Linux terminal emulator for Android. Runs the full Kali Linux environment via proot — no root required. Supports `apt`, `sudo`, and every terminal command in the world.
 
 | | |
 |---|---|
-| **Developer** | Rotlqe |
-| **GitHub** | https://github.com/KaraAixm/KaliDroid |
+| **Developer** | Asotn |
+| **GitHub** | https://github.com/Asotn |
+| **Source** | https://github.com/Asotn/VoidTerm-source |
+| **Version** | 26.2 |
 | **Email** | s.pi@outlook.sa |
 | **License** | GPL-3.0 |
 | **F-Droid** | Ready |
@@ -19,9 +18,9 @@ A real, open-source Kali Linux terminal emulator for Android. Runs the full Kali
 
 ---
 
-## What is KaliDroid?
+## What is VoidTerm?
 
-KaliDroid is not a fake terminal. It is a real application with:
+VoidTerm is not a fake terminal. It is a real application with:
 
 - A **C/C++ PTY engine** that creates real pseudo-terminal sessions
 - A **real bash shell** running inside a proot Kali Linux rootfs
@@ -43,9 +42,9 @@ KaliDroid is not a fake terminal. It is a real application with:
  |_|\_\__,_|_|_|____/|_|  \___/|_|\__,_|
 
   Kali Linux Terminal for Android
-  Developer : github.com/KaraAixm/KaliDroid  |  s.pi@outlook.sa
-  Version   : 1.0.0  |  License: GPL-3.0
-  Type kalidroid-help for usage, or start with apt install
+  Developer : github.com/Asotn  |  s.pi@outlook.sa
+  Version   : 26.2  |  License: GPL-3.0
+  Type voidterm-help for usage, or start with apt install
 ```
 
 ---
@@ -64,8 +63,8 @@ KaliDroid is not a fake terminal. It is a real application with:
 
 ```bash
 # Clone the repository
-git clone https://github.com/KaraAixm/KaliDroid/KaliDroid
-cd KaliDroid
+git clone https://github.com/Asotn/VoidTerm-source
+cd VoidTerm
 
 # Build debug APK
 ./gradlew assembleDebug
@@ -82,14 +81,14 @@ cd KaliDroid
 
 ```bash
 # Generate keystore (one time)
-keytool -genkey -v -keystore kalidroid.jks \
-  -alias kalidroid -keyalg RSA -keysize 2048 -validity 10000
+keytool -genkey -v -keystore voidterm.jks \
+  -alias voidterm -keyalg RSA -keysize 2048 -validity 10000
 
 # Sign the APK
 apksigner sign \
-  --ks kalidroid.jks \
-  --ks-key-alias kalidroid \
-  --out kalidroid-release.apk \
+  --ks voidterm.jks \
+  --ks-key-alias voidterm \
+  --out voidterm-release.apk \
   app/build/outputs/apk/release/app-release-unsigned.apk
 ```
 
@@ -98,7 +97,7 @@ apksigner sign \
 ## Project Structure
 
 ```
-KaliDroid/
+VoidTerm/
 ├── app/
 │   ├── build.gradle                      # App build config (NDK, dependencies)
 │   ├── proguard-rules.pro
@@ -141,8 +140,8 @@ KaliDroid/
 │       │       ├── terminal_jni.cpp      # VT100, history, alias JNI
 │       │       ├── package_jni.cpp       # APT, dpkg, repo JNI
 │       │       └── fs_jni.cpp            # FS, path, crypto JNI
-│       ├── java/com/rotlqe/kalidroid/
-│       │   ├── KaliDroidApp.java         # Application class, notification channels
+│       ├── java/com/asotn/voidterm/
+│       │   ├── VoidTermApp.java         # Application class, notification channels
 │       │   ├── engine/
 │       │   │   ├── NativeTerminal.java   # JNI wrapper for C terminal engine
 │       │   │   └── PackageEngine.java    # APT/dpkg Java interface
@@ -211,8 +210,8 @@ These are not included in the repository due to binary file policies. The bootst
 | `sudo <cmd>` | Run as root (already root in proot) |
 | `./files -0 & permission` | Grant file access permission |
 | `clear` | Clear the terminal screen |
-| `kalidroid-help` | Show built-in help |
-| `kalidroid-about` | Show developer info |
+| `voidterm-help` | Show built-in help |
+| `voidterm-about` | Show developer info |
 | `exit` | Close the terminal |
 
 All standard Unix/Linux commands are supported. This is a real bash shell.
@@ -221,7 +220,7 @@ All standard Unix/Linux commands are supported. This is a real bash shell.
 
 ## Notification System
 
-KaliDroid shows download progress in the status bar even when the app is minimized:
+VoidTerm shows download progress in the status bar even when the app is minimized:
 
 - **Package Downloads** — shows percentage as apt downloads packages
 - **Bootstrap Setup** — shows progress during first-run Kali rootfs setup
@@ -233,7 +232,7 @@ Notification permission is requested on first launch.
 
 ## F-Droid
 
-KaliDroid is built to be fully F-Droid compatible:
+VoidTerm is built to be fully F-Droid compatible:
 
 - No proprietary SDKs
 - No tracking libraries
@@ -248,15 +247,15 @@ KaliDroid is built to be fully F-Droid compatible:
 
 Pull requests are welcome. Please follow the existing code style and include tests where applicable.
 
-**Issues:** https://github.com/KaraAixm/KaliDroid/KaliDroid/issues
+**Issues:** https://github.com/Asotn/VoidTerm-source/issues
 
 ---
 
 ## License
 
 ```
-KaliDroid - Kali Linux Terminal for Android
-Copyright (C) 2024 Rotlqe <s.pi@outlook.sa>
+VoidTerm - Kali Linux Terminal for Android
+Copyright (C) 2024 Asotn <s.pi@outlook.sa>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

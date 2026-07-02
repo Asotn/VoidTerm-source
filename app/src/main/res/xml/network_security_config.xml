@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    VoidTerm - Network Security Config
+    Disables cleartext (unencrypted HTTP) traffic for the whole app.
+    Package downloads and mirror connectivity checks must use HTTPS;
+    plaintext HTTP could be tampered with in transit before any
+    package-signature verification takes place.
+
+    Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
+    License   : GPL-3.0
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

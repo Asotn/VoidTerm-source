@@ -1,6 +1,6 @@
 /*
- * KaliDroid - Alias Engine Header
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * VoidTerm - Alias Engine Header
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  */
 
 #ifndef ALIAS_ENGINE_H

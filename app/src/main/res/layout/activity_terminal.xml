@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    KaliDroid - Terminal Layout
+    VoidTerm - Terminal Layout
     Black background, extra-keys row, monospace input, scroll output.
-    Developer: Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+    Developer: Asotn | https://github.com/Asotn | s.pi@outlook.sa
 -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -54,7 +54,7 @@
         android:background="#111111" />
 
     <!-- Extra keys strip: ESC, Tab, Ctrl, |, /, arrows, etc. -->
-    <com.rotlqe.kalidroid.ui.ShellKeyboardView
+    <com.asotn.voidterm.ui.ShellKeyboardView
         android:id="@+id/shell_keyboard"
         android:layout_width="match_parent"
         android:layout_height="40dp"

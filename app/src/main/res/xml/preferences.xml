@@ -58,8 +58,8 @@
 
         <Preference
             android:key="pref_about"
-            android:title="KaliDroid v1.0.0"
-            android:summary="Developer: Rotlqe | github.com/Rotlqe" />
+            android:title="VoidTerm v26.2"
+            android:summary="Developer: Asotn | github.com/Asotn" />
 
     </PreferenceCategory>
 

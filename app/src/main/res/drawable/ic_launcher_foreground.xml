@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    KaliDroid launcher icon - foreground layer
+    VoidTerm launcher icon - foreground layer
     Terminal window with bold green "> _" prompt.
     Designed for the 108dp canvas with 18dp safe-zone margins.
     Readable down to 48x48 launcher display size.
-    Developer: Rotlqe | https://github.com/Rotlqe
+    Developer: Asotn | https://github.com/Asotn
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"

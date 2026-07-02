@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="KaliDroid"
+        android:text="VoidTerm"
         android:textColor="#00FF77"
         android:textSize="28sp"
         android:fontFamily="monospace"
@@ -33,7 +33,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Version: 1.0.0\nLicense: GPL-3.0\nF-Droid: Ready\n\nDeveloper: Rotlqe\nGitHub: github.com/Rotlqe\nEmail: s.pi@outlook.sa"
+        android:text="Version: 26.2\nLicense: GPL-3.0\nF-Droid: Ready\n\nDeveloper: Asotn\nGitHub: github.com/Asotn\nEmail: s.pi@outlook.sa"
         android:textColor="#CCCCCC"
         android:textSize="13sp"
         android:fontFamily="monospace"

@@ -1,9 +1,9 @@
 /*
- * KaliDroid - PTY Manager
+ * VoidTerm - PTY Manager
  * Handles pseudo-terminal creation, fork/exec of shell processes,
  * I/O multiplexing, and window-size change signals.
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
@@ -20,7 +20,7 @@
 #include <sys/stat.h>
 #include <android/log.h>
 
-#define LOG_TAG "KaliDroid-PTY"
+#define LOG_TAG "VoidTerm-PTY"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,  LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
@@ -150,7 +150,7 @@ int pty_open_session(const char *shell_path,
         // Change to working directory
         if (cwd && strlen(cwd) > 0) {
             if (chdir(cwd) < 0) {
-                chdir("/data/data/com.rotlqe.kalidroid/files/home");
+                chdir("/data/data/com.asotn.voidterm/files/home");
             }
         }
 

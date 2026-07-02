@@ -1,6 +1,6 @@
 /*
- * KaliDroid - Permission Helper Header
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * VoidTerm - Permission Helper Header
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  */
 #ifndef PERMISSION_HELPER_H
 #define PERMISSION_HELPER_H

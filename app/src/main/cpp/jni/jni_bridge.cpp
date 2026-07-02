@@ -1,8 +1,8 @@
 /*
- * KaliDroid - JNI Bridge
+ * VoidTerm - JNI Bridge
  * Connects Java layer to the C/C++ terminal and package engine.
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
@@ -13,7 +13,7 @@
 #include <android/log.h>
 #include "../terminal/pty_manager.h"
 
-#define LOG_TAG "KaliDroid-JNI"
+#define LOG_TAG "VoidTerm-JNI"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,  LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
@@ -31,12 +31,12 @@ static std::string jstr(JNIEnv *env, jstring js) {
 // =========================================================================
 
 extern "C" JNIEXPORT jint JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeInit(JNIEnv *, jobject) {
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeInit(JNIEnv *, jobject) {
     return pty_manager_init();
 }
 
 extern "C" JNIEXPORT jint JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeOpenSession(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeOpenSession(
         JNIEnv *env, jobject,
         jstring shellPath,
         jobjectArray argvArr,
@@ -82,7 +82,7 @@ Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeOpenSession(
 }
 
 extern "C" JNIEXPORT jint JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeWrite(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeWrite(
         JNIEnv *env, jobject, jint session, jbyteArray data) {
     if (!data) return -1;
     jsize len = env->GetArrayLength(data);
@@ -93,7 +93,7 @@ Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeWrite(
 }
 
 extern "C" JNIEXPORT jbyteArray JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeRead(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeRead(
         JNIEnv *env, jobject, jint session, jint maxLen) {
     char *buf = new char[maxLen];
     ssize_t n = pty_read(session, buf, (size_t)maxLen);
@@ -108,37 +108,37 @@ Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeRead(
 }
 
 extern "C" JNIEXPORT jint JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeResize(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeResize(
         JNIEnv *, jobject, jint session, jint cols, jint rows) {
     return pty_resize(session, cols, rows);
 }
 
 extern "C" JNIEXPORT jint JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeClose(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeClose(
         JNIEnv *, jobject, jint session) {
     return pty_close_session(session);
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeIsAlive(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeIsAlive(
         JNIEnv *, jobject, jint session) {
     return (jboolean)pty_is_alive(session);
 }
 
 extern "C" JNIEXPORT jint JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeSendSignal(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeSendSignal(
         JNIEnv *, jobject, jint session, jint sig) {
     return pty_send_signal(session, sig);
 }
 
 extern "C" JNIEXPORT jint JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeGetMasterFd(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeGetMasterFd(
         JNIEnv *, jobject, jint session) {
     return pty_get_master_fd(session);
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeDestroy(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeDestroy(
         JNIEnv *, jobject) {
     pty_manager_destroy();
 }
@@ -148,7 +148,7 @@ Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeDestroy(
 // =========================================================================
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeGetVersion(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeGetVersion(
         JNIEnv *env, jobject) {
-    return env->NewStringUTF("KaliDroid Native Engine v1.0.0");
+    return env->NewStringUTF("VoidTerm Native Engine v26.2");
 }

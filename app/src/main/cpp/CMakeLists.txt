@@ -1,9 +1,9 @@
-# KaliDroid - Native Engine CMakeLists.txt
+# VoidTerm - Native Engine CMakeLists.txt
 # Provides: PTY handling, process management, escape code parsing, I/O buffering
-# Developer: Rotlqe | https://github.com/Rotlqe
+# Developer: Asotn | https://github.com/Asotn
 
 cmake_minimum_required(VERSION 3.22.1)
-project("kalidroid_native" VERSION 1.0.0 LANGUAGES C CXX)
+project("voidterm_native" VERSION 26.2 LANGUAGES C CXX)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
@@ -14,10 +14,10 @@ set(CMAKE_C_FLAGS_RELEASE   "-O2 -DNDEBUG -fvisibility=hidden")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG -fvisibility=hidden")
 
 # -------------------------------------------------------------------------
-# kalidroid_native shared library
+# voidterm_native shared library
 # -------------------------------------------------------------------------
 add_library(
-    kalidroid_native
+    voidterm_native
     SHARED
 
     # PTY / process core
@@ -34,6 +34,7 @@ add_library(
     shell/env_manager.c
     shell/alias_engine.c
     shell/history_manager.c
+    shell/shell_quote.c
 
     # Package engine helpers (dpkg query, dependency resolver assist)
     package/dpkg_helper.c
@@ -66,12 +67,12 @@ find_library(log-lib   log)
 find_library(android-lib android)
 
 target_link_libraries(
-    kalidroid_native
+    voidterm_native
     ${log-lib}
     ${android-lib}
 )
 
-target_include_directories(kalidroid_native PRIVATE
+target_include_directories(voidterm_native PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/terminal
     ${CMAKE_CURRENT_SOURCE_DIR}/shell
@@ -83,9 +84,9 @@ target_include_directories(kalidroid_native PRIVATE
 )
 
 # Compile definitions
-target_compile_definitions(kalidroid_native PRIVATE
+target_compile_definitions(voidterm_native PRIVATE
     ANDROID_BUILD=1
-    KALI_REPO_URL="http://http.kali.org/kali"
+    KALI_REPO_URL="https://http.kali.org/kali"
     KALI_DIST="kali-rolling"
-    APP_VERSION="1.0.0"
+    APP_VERSION="26.2"
 )

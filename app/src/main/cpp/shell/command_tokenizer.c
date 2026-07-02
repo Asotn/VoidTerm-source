@@ -1,9 +1,9 @@
 /*
- * KaliDroid - Command Tokenizer
+ * VoidTerm - Command Tokenizer
  * Tokenizes shell command strings respecting quotes, escape chars, pipes,
  * redirections, and semicolons.
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
@@ -13,7 +13,7 @@
 #include <ctype.h>
 #include <android/log.h>
 
-#define LOG_TAG "KaliDroid-Tok"
+#define LOG_TAG "VoidTerm-Tok"
 
 // -------------------------------------------------------------------------
 // token_list_init

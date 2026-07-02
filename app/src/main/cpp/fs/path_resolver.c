@@ -1,9 +1,9 @@
 /*
- * KaliDroid - Path Resolver
+ * VoidTerm - Path Resolver
  * Translates guest paths (inside Kali rootfs) to host paths and vice versa.
  * Also handles Android-specific path expansions (~/  /sdcard/ etc.)
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <android/log.h>
 
-#define LOG_TAG "KaliDroid-Path"
+#define LOG_TAG "VoidTerm-Path"
 
 static char g_rootfs[512]  = {0};
 static char g_home[512]    = {0};
@@ -33,15 +33,34 @@ void path_resolver_init(const char *rootfs, const char *home, const char *sdcard
 // path_guest_to_host
 // Converts an in-rootfs path like /root/.bashrc
 // to the host path like /data/.../kali-rootfs/root/.bashrc
+//
+// SECURITY: the guest path is untrusted (it can come from terminal input,
+// package metadata, or other guest-controlled sources). Without
+// normalizing ".." segments first, a guest path such as
+// "/../../../data/data/some.other.app/files" would resolve to a host path
+// outside the rootfs sandbox, allowing reads/writes of arbitrary
+// app-private files. We normalize the path and re-verify the final host
+// path still lives under g_rootfs before returning it.
 // -------------------------------------------------------------------------
 int path_guest_to_host(const char *guest_path, char *host_buf, size_t buf_size) {
     if (!guest_path || !host_buf || buf_size == 0) return -1;
     if (g_rootfs[0] == '\0') return -1;
 
+    char normalized[1024];
+    if (path_normalize(guest_path, normalized, sizeof(normalized)) != 0) return -1;
+
     // Strip leading slash for joining
-    const char *rel = (guest_path[0] == '/') ? guest_path + 1 : guest_path;
+    const char *rel = (normalized[0] == '/') ? normalized + 1 : normalized;
     int n = snprintf(host_buf, buf_size, "%s/%s", g_rootfs, rel);
-    return (n > 0 && (size_t)n < buf_size) ? 0 : -1;
+    if (n <= 0 || (size_t)n >= buf_size) return -1;
+
+    // Defense in depth: confirm the resolved path is still inside g_rootfs.
+    size_t rootfs_len = strlen(g_rootfs);
+    if (strncmp(host_buf, g_rootfs, rootfs_len) != 0) return -1;
+    char after = host_buf[rootfs_len];
+    if (after != '\0' && after != '/') return -1;
+
+    return 0;
 }
 
 // -------------------------------------------------------------------------

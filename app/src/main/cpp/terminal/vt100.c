@@ -1,9 +1,9 @@
 /*
- * KaliDroid - VT100/VT220 Terminal Emulator
+ * VoidTerm - VT100/VT220 Terminal Emulator
  * Implements a screen buffer, cursor, SGR attributes.
  * Used internally to track terminal state for rendering.
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <android/log.h>
 
-#define LOG_TAG "KaliDroid-VT100"
+#define LOG_TAG "VoidTerm-VT100"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,  LOG_TAG, __VA_ARGS__)
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 

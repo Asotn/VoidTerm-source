@@ -1,15 +1,16 @@
 /*
- * KaliDroid - HTTP Client
+ * VoidTerm - HTTP Client
  * Minimal HTTP/HTTPS client for package downloads.
  * Uses POSIX sockets for HTTP; HTTPS requires openssl in the proot env.
  * For the bootstrapper itself, we use Java-side HttpURLConnection.
  * This C layer provides synchronous download helpers for post-bootstrap use.
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
 #include "http_client.h"
+#include "../shell/shell_quote.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -21,7 +22,7 @@
 #include <fcntl.h>
 #include <android/log.h>
 
-#define LOG_TAG "KaliDroid-HTTP"
+#define LOG_TAG "VoidTerm-HTTP"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,  LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
@@ -120,9 +121,21 @@ int http_download(const char *url, const char *dest_path,
 
     // HTTPS: use curl inside proot for now (post-bootstrap)
     if (strncmp(url, "https://", 8) == 0) {
-        char cmd[2048];
+        char q_url[2200], q_dest[1200], cmd[4096];
+        if (shell_quote(url, q_url, sizeof(q_url)) != 0) {
+            LOGE("http_download: URL too long/unsafe to quote");
+            return -1;
+        }
+        if (shell_quote(dest_path, q_dest, sizeof(q_dest)) != 0) {
+            LOGE("http_download: dest_path too long/unsafe to quote");
+            return -1;
+        }
+        // --proto/--tlsv1.2/fail-fast pin curl to HTTPS with modern TLS and
+        // reject redirects to non-HTTPS URLs; certificate validation is on
+        // by default (no -k/--insecure is ever passed).
         snprintf(cmd, sizeof(cmd),
-            "curl -fsSL --progress-bar -o '%s' '%s'", dest_path, url);
+            "curl -fsSL --proto '=https' --tlsv1.2 --progress-bar -o %s %s",
+            q_dest, q_url);
         return system(cmd);
     }
 
@@ -140,7 +153,7 @@ int http_download(const char *url, const char *dest_path,
     int reqlen = snprintf(req, sizeof(req),
         "GET %s HTTP/1.1\r\n"
         "Host: %s\r\n"
-        "User-Agent: KaliDroid/1.0\r\n"
+        "User-Agent: VoidTerm/1.0\r\n"
         "Accept: */*\r\n"
         "Connection: close\r\n"
         "\r\n",
@@ -222,8 +235,13 @@ int http_fetch_string(const char *url, char *buf, size_t buf_size) {
 
     // Use curl in proot for HTTPS
     if (strncmp(url, "https://", 8) == 0) {
-        char cmd[2048];
-        snprintf(cmd, sizeof(cmd), "curl -fsSL '%s'", url);
+        char q_url[2200], cmd[2400];
+        if (shell_quote(url, q_url, sizeof(q_url)) != 0) {
+            LOGE("http_fetch_string: URL too long/unsafe to quote");
+            return -1;
+        }
+        snprintf(cmd, sizeof(cmd),
+            "curl -fsSL --proto '=https' --tlsv1.2 %s", q_url);
         FILE *p = popen(cmd, "r");
         if (!p) return -1;
         size_t total = 0;
@@ -246,7 +264,7 @@ int http_fetch_string(const char *url, char *buf, size_t buf_size) {
 
     char req[2048];
     int reqlen = snprintf(req, sizeof(req),
-        "GET %s HTTP/1.0\r\nHost: %s\r\nUser-Agent: KaliDroid/1.0\r\n\r\n",
+        "GET %s HTTP/1.0\r\nHost: %s\r\nUser-Agent: VoidTerm/1.0\r\n\r\n",
         purl.path, purl.host);
     send(sock, req, (size_t)reqlen, 0);
 

@@ -1,8 +1,8 @@
 /*
- * KaliDroid - Progress Tracker
+ * VoidTerm - Progress Tracker
  * Tracks multi-file download progress, calculates overall percentage.
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <android/log.h>
 
-#define LOG_TAG "KaliDroid-Progress"
+#define LOG_TAG "VoidTerm-Progress"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 
 #define MAX_TRACKED_FILES 64

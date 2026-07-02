@@ -1,8 +1,8 @@
 /*
- * KaliDroid - Terminal JNI Extensions
+ * VoidTerm - Terminal JNI Extensions
  * JNI bindings for VT100 emulator, history, alias, env managers.
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
@@ -15,7 +15,7 @@
 #include "../shell/env_manager.h"
 #include "../shell/command_tokenizer.h"
 
-#define LOG_TAG "KaliDroid-TermJNI"
+#define LOG_TAG "VoidTerm-TermJNI"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 
 static vt100_t    g_vt100;
@@ -28,7 +28,7 @@ static bool       g_history_init  = false;
 // =========================================================================
 
 extern "C" JNIEXPORT jint JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeVt100Init(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeVt100Init(
         JNIEnv *, jobject, jint cols, jint rows) {
     if (g_vt100_init) vt100_destroy(&g_vt100);
     int r = vt100_init(&g_vt100, cols, rows);
@@ -37,7 +37,7 @@ Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeVt100Init(
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeVt100Feed(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeVt100Feed(
         JNIEnv *env, jobject, jbyteArray data) {
     if (!g_vt100_init || !data) return;
     jsize len = env->GetArrayLength(data);
@@ -47,32 +47,32 @@ Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeVt100Feed(
 }
 
 extern "C" JNIEXPORT jint JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeVt100Resize(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeVt100Resize(
         JNIEnv *, jobject, jint cols, jint rows) {
     if (!g_vt100_init) return -1;
     return vt100_resize(&g_vt100, cols, rows);
 }
 
 extern "C" JNIEXPORT jint JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeVt100GetCursorRow(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeVt100GetCursorRow(
         JNIEnv *, jobject) {
     return g_vt100_init ? g_vt100.cursor_row : 0;
 }
 
 extern "C" JNIEXPORT jint JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeVt100GetCursorCol(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeVt100GetCursorCol(
         JNIEnv *, jobject) {
     return g_vt100_init ? g_vt100.cursor_col : 0;
 }
 
 extern "C" JNIEXPORT jboolean JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeVt100IsDirty(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeVt100IsDirty(
         JNIEnv *, jobject) {
     return g_vt100_init && g_vt100.dirty;
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeVt100ClearDirty(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeVt100ClearDirty(
         JNIEnv *, jobject) {
     if (g_vt100_init) g_vt100.dirty = 0;
 }
@@ -82,7 +82,7 @@ Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeVt100ClearDirty(
 // =========================================================================
 
 extern "C" JNIEXPORT jint JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeHistoryInit(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeHistoryInit(
         JNIEnv *env, jobject, jint maxEntries, jstring historyFile) {
     const char *path = historyFile
         ? env->GetStringUTFChars(historyFile, nullptr)
@@ -94,7 +94,7 @@ Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeHistoryInit(
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeHistoryAdd(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeHistoryAdd(
         JNIEnv *env, jobject, jstring cmd) {
     if (!g_history_init || !cmd) return;
     const char *c = env->GetStringUTFChars(cmd, nullptr);
@@ -103,7 +103,7 @@ Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeHistoryAdd(
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeHistoryPrev(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeHistoryPrev(
         JNIEnv *env, jobject) {
     if (!g_history_init) return env->NewStringUTF("");
     const char *s = history_prev(&g_history);
@@ -111,7 +111,7 @@ Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeHistoryPrev(
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeHistoryNext(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeHistoryNext(
         JNIEnv *env, jobject) {
     if (!g_history_init) return env->NewStringUTF("");
     const char *s = history_next(&g_history);
@@ -119,7 +119,7 @@ Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeHistoryNext(
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeHistorySave(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeHistorySave(
         JNIEnv *, jobject) {
     if (g_history_init) history_save(&g_history);
 }
@@ -129,13 +129,13 @@ Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeHistorySave(
 // =========================================================================
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeAliasInit(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeAliasInit(
         JNIEnv *, jobject) {
     alias_init();
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeAliasExpand(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeAliasExpand(
         JNIEnv *env, jobject, jstring cmd) {
     if (!cmd) return env->NewStringUTF("");
     const char *c = env->GetStringUTFChars(cmd, nullptr);
@@ -146,7 +146,7 @@ Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeAliasExpand(
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeAliasSet(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeAliasSet(
         JNIEnv *env, jobject, jstring name, jstring expansion) {
     if (!name || !expansion) return;
     const char *n = env->GetStringUTFChars(name, nullptr);
@@ -161,7 +161,7 @@ Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeAliasSet(
 // =========================================================================
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_rotlqe_kalidroid_engine_NativeTerminal_nativeGetFirstWord(
+Java_com_asotn_voidterm_engine_NativeTerminal_nativeGetFirstWord(
         JNIEnv *env, jobject, jstring cmd) {
     if (!cmd) return env->NewStringUTF("");
     const char *c = env->GetStringUTFChars(cmd, nullptr);

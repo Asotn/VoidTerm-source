@@ -1,8 +1,8 @@
 /*
- * KaliDroid - Environment Manager (C layer)
+ * VoidTerm - Environment Manager (C layer)
  * Manages environment variable key-value store.
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <android/log.h>
 
-#define LOG_TAG "KaliDroid-Env"
+#define LOG_TAG "VoidTerm-Env"
 #define MAX_ENV_ENTRIES 256
 
 typedef struct {

@@ -1,9 +1,9 @@
 /*
- * KaliDroid - Repository Manager
+ * VoidTerm - Repository Manager
  * Manages Kali Linux APT repository sources, mirrors, and keyring.
  * Handles InRelease file fetching, parsing, and verification.
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
@@ -12,12 +12,13 @@
 #include "../crypto/sha256.h"
 #include "../fs/fs_utils.h"
 #include "../terminal/process_runner.h"
+#include "../shell/shell_quote.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <android/log.h>
 
-#define LOG_TAG "KaliDroid-Repo"
+#define LOG_TAG "VoidTerm-Repo"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,  LOG_TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
@@ -41,7 +42,7 @@ void repo_manager_init(const char *proot_bin, const char *rootfs, const char *ar
     g_repo_count = 0;
 
     // Add default Kali repo
-    repo_add("http://http.kali.org/kali", "kali-rolling",
+    repo_add("https://http.kali.org/kali", "kali-rolling",
               "main contrib non-free non-free-firmware", 1);
 }
 
@@ -96,8 +97,8 @@ int repo_write_sources_list(void) {
         return -1;
     }
 
-    fprintf(f, "# KaliDroid - Automatically generated sources.list\n");
-    fprintf(f, "# Developer: Rotlqe | github.com/Rotlqe\n\n");
+    fprintf(f, "# VoidTerm - Automatically generated sources.list\n");
+    fprintf(f, "# Developer: Asotn | github.com/Asotn\n\n");
 
     for (int i = 0; i < g_repo_count; i++) {
         if (!g_repos[i].enabled) {
@@ -116,7 +117,12 @@ int repo_write_sources_list(void) {
 
 // -------------------------------------------------------------------------
 // repo_fetch_inrelease
-// Downloads the InRelease file for a repo and verifies its SHA256.
+// Downloads the InRelease file for a repo. NOTE: this function only
+// fetches the file — it does not itself perform any cryptographic
+// verification. Trust is established by apt-get's own gpg signature
+// checking (against kali-archive-keyring) when apt_update() runs the
+// real apt-get inside the proot environment. Callers must not treat a
+// successful fetch here as a verified/trusted release file.
 // -------------------------------------------------------------------------
 int repo_fetch_inrelease(int repo_index, char *out_buf, size_t out_size) {
     if (repo_index < 0 || repo_index >= g_repo_count) return -1;
@@ -174,10 +180,15 @@ const repo_entry_t *repo_get(int index) {
 int repo_check_connectivity(const char *mirror_url) {
     if (!mirror_url) return -1;
     char out[256] = {0};
-    char cmd[512];
+    char url_expr[1300], q_url[1400], cmd[1600];
+    snprintf(url_expr, sizeof(url_expr), "%s/dists/kali-rolling/Release", mirror_url);
+    if (shell_quote(url_expr, q_url, sizeof(q_url)) != 0) {
+        LOGE("repo_check_connectivity: URL too long/unsafe to quote");
+        return -1;
+    }
     snprintf(cmd, sizeof(cmd),
-        "curl -sL --connect-timeout 10 --max-time 15 -o /dev/null -w '%%{http_code}' '%s/dists/kali-rolling/Release'",
-        mirror_url);
+        "curl -sL --proto '=https' --connect-timeout 10 --max-time 15 -o /dev/null -w '%%{http_code}' %s",
+        q_url);
 
     int ret = process_run_proot(g_proot_bin, g_rootfs, cmd, out, sizeof(out));
     if (ret != 0) return -1;

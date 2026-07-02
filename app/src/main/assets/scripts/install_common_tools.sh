@@ -1,5 +1,5 @@
 #!/bin/bash
-# KaliDroid - Common Tools Installer
+# VoidTerm - Common Tools Installer
 # Installs the most commonly used Kali Linux tools.
 # Run inside the proot environment after setup_kali_environment.sh
 #
@@ -11,13 +11,13 @@
 #   ./install_common_tools.sh wireless   - install wireless tools only
 #   ./install_common_tools.sh forensics  - install forensics tools only
 #
-# Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+# Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
 # License   : GPL-3.0
 
 set -e
 export DEBIAN_FRONTEND=noninteractive
 
-log()  { echo "[KaliDroid] $*"; }
+log()  { echo "[VoidTerm] $*"; }
 ok()   { echo "[  OK    ] $*"; }
 warn() { echo "[ WARN   ] $*"; }
 
@@ -201,6 +201,6 @@ apt-get autoclean  2>/dev/null || true
 
 echo ""
 echo "========================================"
-echo " KaliDroid - Tool installation complete"
-echo " Developer: Rotlqe | github.com/Rotlqe"
+echo " VoidTerm - Tool installation complete"
+echo " Developer: Asotn | github.com/Asotn"
 echo "========================================"

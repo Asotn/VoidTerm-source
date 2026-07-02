@@ -1,6 +1,6 @@
 /*
- * KaliDroid - PGP Verify Header
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * VoidTerm - PGP Verify Header
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  */
 #ifndef PGP_VERIFY_H
 #define PGP_VERIFY_H

@@ -1,5 +1,5 @@
-@rem KaliDroid - Gradle wrapper for Windows
-@rem Developer: Rotlqe | https://github.com/Rotlqe
+@rem VoidTerm - Gradle wrapper for Windows
+@rem Developer: Asotn | https://github.com/Asotn
 
 @if "%DEBUG%" == "" @echo off
 @rem ##########################################################################

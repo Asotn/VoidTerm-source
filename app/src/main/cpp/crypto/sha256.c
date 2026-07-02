@@ -1,9 +1,9 @@
 /*
- * KaliDroid - SHA-256 Implementation
+ * VoidTerm - SHA-256 Implementation
  * Used to verify downloaded package checksums.
  * Public domain implementation (based on RFC 6234).
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 

@@ -1,5 +1,5 @@
-# KaliDroid ProGuard rules
-# Developer: Rotlqe
+# VoidTerm ProGuard rules
+# Developer: Asotn
 
 # Keep the JNI native methods
 -keepclasseswithmembernames class * {
@@ -7,7 +7,7 @@
 }
 
 # Keep all classes in the package
--keep class com.rotlqe.kalidroid.** { *; }
+-keep class com.asotn.voidterm.** { *; }
 
 # Keep enums
 -keepclassmembers enum * {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    KaliDroid - Android Terminal with Kali Linux Package Manager
-    Developer  : Rotlqe
-    GitHub     : https://github.com/Rotlqe
+    VoidTerm - Android Terminal with Kali Linux Package Manager
+    Developer  : Asotn
+    GitHub     : https://github.com/Asotn
     Email      : s.pi@outlook.sa
     License    : GPL-3.0
     F-Droid    : Ready
@@ -40,7 +40,7 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
-        android:name=".KaliDroidApp"
+        android:name=".VoidTermApp"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -48,8 +48,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.KaliDroid"
+        android:theme="@style/Theme.VoidTerm"
         android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="false"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
 
         <!-- Main Terminal Activity -->
@@ -60,7 +62,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="unspecified"
-            android:theme="@style/Theme.KaliDroid">
+            android:theme="@style/Theme.VoidTerm">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -86,7 +88,7 @@
         <activity
             android:name=".ui.PackageInstallActivity"
             android:exported="false"
-            android:theme="@style/Theme.KaliDroid.Transparent" />
+            android:theme="@style/Theme.VoidTerm.Transparent" />
 
         <!-- Background download/install service -->
         <service

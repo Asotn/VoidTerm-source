@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">KaliDroid</string>
+    <string name="app_name">VoidTerm</string>
     <string name="settings_title">Settings</string>
-    <string name="about_title">About KaliDroid</string>
-    <string name="developer_github">https://github.com/Rotlqe</string>
+    <string name="about_title">About VoidTerm</string>
+    <string name="developer_github">https://github.com/Asotn</string>
     <string name="developer_email">s.pi@outlook.sa</string>
-    <string name="app_version">1.0.0</string>
+    <string name="app_version">26.2</string>
     <string name="notification_channel_download">Package Downloads</string>
     <string name="notification_channel_bootstrap">Bootstrap Setup</string>
     <string name="notification_channel_session">Terminal Session</string>
@@ -20,5 +20,5 @@
     <string name="pref_history_size_title">Command History Size</string>
     <string name="pref_reset_bootstrap_title">Reset Kali Environment</string>
     <string name="pref_reset_bootstrap_summary">Delete rootfs and re-download from scratch</string>
-    <string name="pref_about_title">About KaliDroid</string>
+    <string name="pref_about_title">About VoidTerm</string>
 </resources>

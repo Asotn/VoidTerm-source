@@ -1,8 +1,8 @@
 /*
- * KaliDroid - History Manager
+ * VoidTerm - History Manager
  * Persists and navigates command history (like .bash_history).
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <android/log.h>
 
-#define LOG_TAG "KaliDroid-Hist"
+#define LOG_TAG "VoidTerm-Hist"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 
 // -------------------------------------------------------------------------

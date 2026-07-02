@@ -1,8 +1,8 @@
 /*
- * KaliDroid - MD5 Implementation
+ * VoidTerm - MD5 Implementation
  * Used for legacy APT checksum verification (some older repos use MD5).
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 

@@ -1,6 +1,6 @@
 /*
- * KaliDroid - Progress Tracker Header
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * VoidTerm - Progress Tracker Header
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  */
 #ifndef PROGRESS_TRACKER_H
 #define PROGRESS_TRACKER_H

@@ -1,6 +1,6 @@
 /*
- * KaliDroid - APT Wrapper Header
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * VoidTerm - APT Wrapper Header
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  */
 #ifndef APT_WRAPPER_H
 #define APT_WRAPPER_H

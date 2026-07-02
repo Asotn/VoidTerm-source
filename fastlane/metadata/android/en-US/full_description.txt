@@ -1,7 +1,7 @@
-KaliDroid — Kali Linux Terminal for Android.
+VoidTerm — Kali Linux Terminal for Android.
 
 Run a real Kali Linux environment on your Android device. No root required. Full apt-get support. Access the entire Kali rolling repository.
 
 Type commands. Install tools. Use sudo. Pure terminal, pure black, no noise.
 
-Developer: Rotlqe | github.com/Rotlqe | s.pi@outlook.sa
+Developer: Asotn | github.com/Asotn | s.pi@outlook.sa

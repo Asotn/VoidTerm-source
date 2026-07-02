@@ -1,6 +1,6 @@
 /*
- * KaliDroid - History Manager Header
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * VoidTerm - History Manager Header
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  */
 
 #ifndef HISTORY_MANAGER_H

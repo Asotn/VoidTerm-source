@@ -1,9 +1,9 @@
 /*
- * KaliDroid - ANSI/VT100 Escape Code Parser
+ * VoidTerm - ANSI/VT100 Escape Code Parser
  * Parses terminal escape sequences for color, cursor control, screen ops.
  * Supports: CSI, OSC, DCS, ESC sequences — xterm-256color compatible.
  *
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  * License   : GPL-3.0
  */
 
@@ -13,7 +13,7 @@
 #include <ctype.h>
 #include <android/log.h>
 
-#define LOG_TAG "KaliDroid-ESC"
+#define LOG_TAG "VoidTerm-ESC"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 // -------------------------------------------------------------------------

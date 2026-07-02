@@ -1,4 +1,4 @@
-# KaliDroid - Required Binary Assets
+# VoidTerm - Required Binary Assets
 
 Before building the APK, you must place the following **static** pre-compiled
 binaries for each target ABI in this directory:
@@ -64,4 +64,4 @@ binary at runtime using `Build.SUPPORTED_ABIS[0]`.
 
 ---
 
-Developer: Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+Developer: Asotn | https://github.com/Asotn | s.pi@outlook.sa

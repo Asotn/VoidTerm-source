@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Main app theme: pure black terminal -->
-    <style name="Theme.KaliDroid" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.VoidTerm" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">#000000</item>
         <item name="colorPrimaryDark">#000000</item>
         <item name="colorAccent">#00FF77</item>
@@ -11,11 +11,11 @@
         <item name="android:navigationBarColor">#000000</item>
         <item name="android:textColorPrimary">#E0E0E0</item>
         <item name="android:textColorSecondary">#888888</item>
-        <item name="toolbarStyle">@style/Widget.KaliDroid.Toolbar</item>
+        <item name="toolbarStyle">@style/Widget.VoidTerm.Toolbar</item>
     </style>
 
     <!-- Toolbar style -->
-    <style name="Widget.KaliDroid.Toolbar" parent="Widget.AppCompat.Toolbar">
+    <style name="Widget.VoidTerm.Toolbar" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">#0D0D0D</item>
         <item name="titleTextColor">#CCCCCC</item>
         <item name="subtitleTextColor">#666666</item>
@@ -23,7 +23,7 @@
     </style>
 
     <!-- Transparent activity for package install -->
-    <style name="Theme.KaliDroid.Transparent" parent="Theme.KaliDroid">
+    <style name="Theme.VoidTerm.Transparent" parent="Theme.VoidTerm">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -32,7 +32,7 @@
     </style>
 
     <!-- Preference theme -->
-    <style name="Theme.KaliDroid.Settings" parent="Theme.KaliDroid">
+    <style name="Theme.VoidTerm.Settings" parent="Theme.VoidTerm">
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 

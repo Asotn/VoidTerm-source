@@ -1,4 +1,4 @@
-name: Build KaliDroid APK
+name: Build VoidTerm APK
 
 on:
   push:
@@ -57,14 +57,14 @@ jobs:
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: kalidroid-debug-${{ github.sha }}
+          name: voidterm-debug-${{ github.sha }}
           path: app/build/outputs/apk/debug/app-debug.apk
           retention-days: 7
 
       - name: Upload Release APK
         uses: actions/upload-artifact@v4
         with:
-          name: kalidroid-release-${{ github.sha }}
+          name: voidterm-release-${{ github.sha }}
           path: app/build/outputs/apk/release/app-release-unsigned.apk
           retention-days: 30
 
@@ -76,7 +76,7 @@ jobs:
             app/build/outputs/apk/release/app-release-unsigned.apk
             app/build/outputs/apk/debug/app-debug.apk
           body: |
-            ## KaliDroid ${{ github.ref_name }}
+            ## VoidTerm ${{ github.ref_name }}
 
             ### Install
             Download the APK below and install it on your Android device.
@@ -85,6 +85,6 @@ jobs:
             ### What's new
             See [CHANGELOG.md](CHANGELOG.md) for details.
 
-            **Developer:** Rotlqe | github.com/Rotlqe | s.pi@outlook.sa
+            **Developer:** Asotn | github.com/Asotn | s.pi@outlook.sa
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

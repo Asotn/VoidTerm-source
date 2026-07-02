@@ -1,6 +1,6 @@
 /*
- * KaliDroid - Path Resolver Header
- * Developer : Rotlqe | https://github.com/Rotlqe | s.pi@outlook.sa
+ * VoidTerm - Path Resolver Header
+ * Developer : Asotn | https://github.com/Asotn | s.pi@outlook.sa
  */
 #ifndef PATH_RESOLVER_H
 #define PATH_RESOLVER_H
