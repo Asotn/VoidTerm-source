@@ -1,9 +1,4 @@
-Note: The project officially ended on [date]. 
-"Jun-8" I saw the entire warehouse on [date]. "Jun 9"
-Updates from the developer have been permanently 
-discontinued. Continued viewing of the Redmi
-Note: You can find out some things about the reason. 
-Directly from this site "https://kalid-roid.s-pi.workers.dev/"
+Hello, the project was archived but has been unarchived and updated. The next version of Calidroid will change many things, and we have rebuilt it. In a few days, the second alert will be issued, and the name will be changed. 
 
 # KaliDroid **Kali Linux Terminal for Android**
 A real, open-source Kali Linux terminal emulator for Android. Runs the full Kali Linux environment via proot — no root required. Supports `apt`, `sudo`, and every terminal command in the world.
