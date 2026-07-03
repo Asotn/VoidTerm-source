@@ -13,6 +13,11 @@
 #ifndef VOIDTERM_SHELL_QUOTE_H
 #define VOIDTERM_SHELL_QUOTE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include <stddef.h>
 
 /*
@@ -31,5 +36,10 @@ int shell_quote(const char *in, char *out_buf, size_t out_size);
  * before they are used to build a command string.
  */
 int shell_is_safe_token(const char *in);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

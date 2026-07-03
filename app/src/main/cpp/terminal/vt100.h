@@ -6,6 +6,11 @@
 #ifndef VT100_H
 #define VT100_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include <stddef.h>
 #include "escape_parser.h"
 
@@ -41,5 +46,10 @@ void                vt100_destroy(vt100_t *vt);
 void                vt100_feed(vt100_t *vt, const char *data, size_t len);
 int                 vt100_resize(vt100_t *vt, int cols, int rows);
 const vt100_cell_t *vt100_get_cell(const vt100_t *vt, int row, int col);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* VT100_H */

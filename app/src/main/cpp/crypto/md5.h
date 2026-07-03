@@ -4,6 +4,11 @@
  */
 #ifndef MD5_H
 #define MD5_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdint.h>
 #include <stddef.h>
 typedef struct {
@@ -14,4 +19,9 @@ void md5_init(md5_ctx_t *ctx);
 void md5_update(md5_ctx_t *ctx, const uint8_t *data, size_t len);
 void md5_final(md5_ctx_t *ctx, uint8_t hash[16]);
 void md5_hex(const uint8_t hash[16], char out[33]);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

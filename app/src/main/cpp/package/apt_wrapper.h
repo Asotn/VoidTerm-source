@@ -4,6 +4,11 @@
  */
 #ifndef APT_WRAPPER_H
 #define APT_WRAPPER_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stddef.h>
 
 void        apt_init(const char *proot_bin, const char *rootfs, const char *mirror);
@@ -23,4 +28,9 @@ int         apt_write_sources_list(const char *mirror, const char *dist, const c
 void        apt_set_mirror(const char *mirror);
 const char *apt_get_mirror(void);
 int         apt_parse_progress_line(const char *line);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

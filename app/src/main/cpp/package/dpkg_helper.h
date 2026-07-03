@@ -4,6 +4,11 @@
  */
 #ifndef DPKG_HELPER_H
 #define DPKG_HELPER_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stddef.h>
 
 typedef enum {
@@ -26,4 +31,9 @@ int         dpkg_get_files(const char *pkg_name, char *buf, size_t buf_size);
 int         dpkg_reconfigure(const char *pkg_name, char *out, size_t out_size);
 int         dpkg_fix_broken(char *out, size_t out_size);
 const char *dpkg_status_to_string(dpkg_status_t status);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

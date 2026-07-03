@@ -6,6 +6,11 @@
 #ifndef SHA256_H
 #define SHA256_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -24,5 +29,10 @@ void sha256_final(sha256_ctx_t *ctx, uint8_t hash[32]);
 void sha256_hex(const uint8_t hash[32], char out[65]);
 int  sha256_file(const char *path, char out_hex[65]);
 int  sha256_verify_file(const char *path, const char *expected_hex);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* SHA256_H */

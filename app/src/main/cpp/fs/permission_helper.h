@@ -4,6 +4,11 @@
  */
 #ifndef PERMISSION_HELPER_H
 #define PERMISSION_HELPER_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 int perm_can_read(const char *path);
 int perm_can_write(const char *path);
 int perm_can_execute(const char *path);
@@ -13,4 +18,9 @@ int perm_check_sdcard(void);
 int perm_check_sdcard_write(void);
 int perm_is_root(void);
 int perm_get_uid(void);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

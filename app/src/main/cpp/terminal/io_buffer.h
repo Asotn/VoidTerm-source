@@ -6,6 +6,11 @@
 #ifndef IO_BUFFER_H
 #define IO_BUFFER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include <stddef.h>
 #include <stdatomic.h>
 
@@ -26,5 +31,10 @@ size_t io_buffer_available(const io_buffer_t *b);
 size_t io_buffer_free_space(const io_buffer_t *b);
 void   io_buffer_clear(io_buffer_t *b);
 int    io_buffer_is_empty(const io_buffer_t *b);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* IO_BUFFER_H */

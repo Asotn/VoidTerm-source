@@ -4,6 +4,11 @@
  */
 #ifndef REPO_MANAGER_H
 #define REPO_MANAGER_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stddef.h>
 
 typedef struct {
@@ -23,4 +28,9 @@ int                repo_packages_url(int repo_index, const char *component, char
 int                repo_get_count(void);
 const repo_entry_t *repo_get(int index);
 int                repo_check_connectivity(const char *mirror_url);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

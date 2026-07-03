@@ -6,6 +6,11 @@
 #ifndef ESCAPE_PARSER_H
 #define ESCAPE_PARSER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include <stddef.h>
 
 #define ESC_MAX_PARAMS       32
@@ -59,5 +64,10 @@ void         escape_parser_feed_str(escape_parser_t *p, const char *s, size_t le
 int          escape_parser_get_param(const escape_parser_t *p, int index, int def);
 void         escape_parser_reset(escape_parser_t *p);
 ansi_color_t escape_decode_color(const escape_parser_t *p, int *idx);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* ESCAPE_PARSER_H */

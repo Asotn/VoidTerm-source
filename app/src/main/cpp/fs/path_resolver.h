@@ -4,6 +4,11 @@
  */
 #ifndef PATH_RESOLVER_H
 #define PATH_RESOLVER_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stddef.h>
 void        path_resolver_init(const char *rootfs, const char *home, const char *sdcard);
 int         path_guest_to_host(const char *guest_path, char *host_buf, size_t buf_size);
@@ -14,4 +19,9 @@ int         path_join(const char *base, const char *rel, char *out_buf, size_t b
 const char *path_basename(const char *path);
 int         path_dirname(const char *path, char *out_buf, size_t buf_size);
 int         path_sdcard_to_host(const char *path, char *out_buf, size_t buf_size);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

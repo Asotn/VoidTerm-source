@@ -4,6 +4,11 @@
  */
 #ifndef FS_UTILS_H
 #define FS_UTILS_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stddef.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -25,4 +30,9 @@ int   fs_append_file(const char *path, const char *data, size_t len);
 int   fs_chmod(const char *path, mode_t mode);
 int   fs_list_dir(const char *path, fs_dir_entry_fn callback, void *userdata);
 long  fs_get_free_space(const char *path);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

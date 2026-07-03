@@ -6,6 +6,11 @@
 #ifndef PTY_MANAGER_H
 #define PTY_MANAGER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include <sys/types.h>
 
 #define MAX_PTY_SESSIONS 8
@@ -35,5 +40,10 @@ int     pty_get_master_fd(int session);
 int     pty_is_alive(int session);
 int     pty_send_signal(int session, int sig);
 void    pty_manager_destroy(void);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* PTY_MANAGER_H */

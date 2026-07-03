@@ -6,6 +6,11 @@
 #ifndef HISTORY_MANAGER_H
 #define HISTORY_MANAGER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #define HISTORY_MAX_PATH 256
 
 typedef struct {
@@ -27,5 +32,10 @@ int         history_save(const history_t *h);
 int         history_load(history_t *h);
 const char *history_search(const history_t *h, const char *prefix);
 void        history_clear(history_t *h);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* HISTORY_MANAGER_H */

@@ -6,6 +6,11 @@
 #ifndef PROCESS_RUNNER_H
 #define PROCESS_RUNNER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include <stddef.h>
 
 int process_run(const char *path, const char *const argv[],
@@ -22,5 +27,10 @@ int process_run_proot(const char *proot_bin, const char *rootfs,
 int process_check_exists(const char *path);
 
 int process_get_output_line(const char *cmd, char *line_buf, size_t line_buf_size);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* PROCESS_RUNNER_H */
