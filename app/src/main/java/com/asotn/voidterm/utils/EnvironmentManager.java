@@ -17,11 +17,6 @@ import android.os.Build;
 import android.util.Log;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +25,8 @@ public final class EnvironmentManager {
     private static final String TAG = "VoidTerm-Env";
     private static final String PREFS_NAME = "voidterm_env";
     private static final String KEY_BOOTSTRAPPED = "bootstrapped";
+    private static final String KEY_DISTRO_ID = "distro_id";
+    private static final String KEY_DISTRO_NAME = "distro_name";
 
     // Populated by init()
     private static Context appContext;
@@ -44,6 +41,7 @@ public final class EnvironmentManager {
     public static String HOME_DIR;
     public static String KALI_ROOTFS_DIR;
     public static String PROOT_BIN;
+    public static String PROOT_LOADER_BIN;
     public static String BUSYBOX_BIN;
 
     private EnvironmentManager() { }
@@ -60,8 +58,16 @@ public final class EnvironmentManager {
         TMP_DIR          = FILES_DIR + "/tmp";
         KALI_ROOTFS_DIR = FILES_DIR + "/kali-rootfs";
         HOME_DIR         = KALI_ROOTFS_DIR + "/root";
-        PROOT_BIN        = BIN_DIR + "/proot";
-        BUSYBOX_BIN      = BIN_DIR + "/busybox";
+
+        // proot / busybox are shipped as jniLibs (lib<name>.so under the app's
+        // nativeLibraryDir). Android guarantees these are extracted to disk
+        // with the executable bit set at install time, on every Android
+        // version — unlike files copied from assets/ at runtime, which can
+        // be blocked by W^X / noexec restrictions on newer Android versions.
+        String nativeDir = appContext.getApplicationInfo().nativeLibraryDir;
+        PROOT_BIN        = nativeDir + "/libproot.so";
+        BUSYBOX_BIN      = nativeDir + "/libbusybox.so";
+        PROOT_LOADER_BIN = nativeDir + "/libprootloader.so";
 
         for (String dir : new String[]{BIN_DIR, TMP_DIR, KALI_ROOTFS_DIR}) {
             File f = new File(dir);
@@ -82,9 +88,23 @@ public final class EnvironmentManager {
         return prefs.getBoolean(KEY_BOOTSTRAPPED, false) && new File(HOME_DIR).exists();
     }
 
-    public static void markBootstrapped() {
+    public static void markBootstrapped(String distroId, String distroDisplayName) {
         if (prefs == null) return;
-        prefs.edit().putBoolean(KEY_BOOTSTRAPPED, true).apply();
+        prefs.edit()
+            .putBoolean(KEY_BOOTSTRAPPED, true)
+            .putString(KEY_DISTRO_ID, distroId)
+            .putString(KEY_DISTRO_NAME, distroDisplayName)
+            .apply();
+    }
+
+    public static String getInstalledDistroName() {
+        if (prefs == null) return null;
+        return prefs.getString(KEY_DISTRO_NAME, null);
+    }
+
+    public static String getInstalledDistroId() {
+        if (prefs == null) return null;
+        return prefs.getString(KEY_DISTRO_ID, null);
     }
 
     // -------------------------------------------------------------------
@@ -136,8 +156,7 @@ public final class EnvironmentManager {
         args.add("-i");
         args.add("HOME=/root");
         args.add("TERM=xterm-256color");
-        args.add("/bin/bash");
-        if (loginShell) args.add("--login");
+        args.add("/bin/sh");
         return args.toArray(new String[0]);
     }
 
@@ -149,44 +168,15 @@ public final class EnvironmentManager {
             "LOGNAME=root",
             "LANG=en_US.UTF-8",
             "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:" + BIN_DIR,
-            "DEBIAN_FRONTEND=noninteractive"
+            "DEBIAN_FRONTEND=noninteractive",
+            "PROOT_LOADER=" + PROOT_LOADER_BIN,
+            "PROOT_TMP_DIR=" + TMP_DIR
         };
     }
 
     // -------------------------------------------------------------------
-    // Kali rootfs download URL (per-architecture)
+    // Distro rootfs downloads are resolved per-distro via DistroCatalog,
+    // matched to this device's architecture through getKaliArch().
+    // See BootstrapService.runBootstrap().
     // -------------------------------------------------------------------
-    public static String getRootfsUrl() {
-        String arch = getKaliArch();
-        return "https://images.kali.org/nethunter/rootfs/kalifs-" + arch + "-minimal.tar.xz";
-    }
-
-    // -------------------------------------------------------------------
-    // Asset extraction (proot / busybox binaries bundled in assets/bin)
-    // -------------------------------------------------------------------
-    public static boolean extractAsset(String assetPath, String destPath) {
-        if (appContext == null) return false;
-        File dest = new File(destPath);
-        try {
-            File parent = dest.getParentFile();
-            if (parent != null && !parent.exists()) {
-                //noinspection ResultOfMethodCallIgnored
-                parent.mkdirs();
-            }
-            try (InputStream in = appContext.getAssets().open(assetPath);
-                 OutputStream out = new FileOutputStream(dest)) {
-                byte[] buf = new byte[8192];
-                int n;
-                while ((n = in.read(buf)) != -1) {
-                    out.write(buf, 0, n);
-                }
-            }
-            //noinspection ResultOfMethodCallIgnored
-            dest.setExecutable(true, false);
-            return true;
-        } catch (IOException e) {
-            Log.w(TAG, "extractAsset(" + assetPath + ") failed: " + e.getMessage());
-            return false;
-        }
-    }
 }

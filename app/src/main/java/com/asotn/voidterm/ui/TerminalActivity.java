@@ -9,7 +9,10 @@
 package com.asotn.voidterm.ui;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,10 +29,14 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.asotn.voidterm.R;
+import com.asotn.voidterm.service.BootstrapService;
 import com.asotn.voidterm.terminal.CommandProcessor;
 import com.asotn.voidterm.terminal.TerminalSession;
+import com.asotn.voidterm.utils.DistroCatalog;
+import com.asotn.voidterm.utils.EnvironmentManager;
 
 public class TerminalActivity extends AppCompatActivity {
 
@@ -39,6 +46,31 @@ public class TerminalActivity extends AppCompatActivity {
     private ScrollView  scrollView;
     private EditText    inputView;
     private TerminalSession session;
+
+    /** True while we're waiting for the user to type a distro number. */
+    private boolean awaitingDistroChoice = false;
+
+    private final BroadcastReceiver bootstrapReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String status = intent.getStringExtra(BootstrapService.EXTRA_STATUS);
+            switch (intent.getAction() == null ? "" : intent.getAction()) {
+                case BootstrapService.BROADCAST_PROGRESS:
+                    if (status != null) appendOutput(status + "\r\n");
+                    break;
+                case BootstrapService.BROADCAST_ERROR:
+                    appendOutput("\r\n[!] " + status + "\r\n" +
+                            "Check your internet connection and try again:\r\n\r\n" +
+                            DistroCatalog.renderMenu());
+                    awaitingDistroChoice = true;
+                    break;
+                case BootstrapService.BROADCAST_DONE:
+                    appendOutput("\r\nStarting shell...\r\n\r\n");
+                    session.start();
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +87,23 @@ public class TerminalActivity extends AppCompatActivity {
         session = new TerminalSession(this);
         session.setOutputCallback(this::appendOutput);
 
+        IntentFilter bootstrapFilter = new IntentFilter();
+        bootstrapFilter.addAction(BootstrapService.BROADCAST_PROGRESS);
+        bootstrapFilter.addAction(BootstrapService.BROADCAST_DONE);
+        bootstrapFilter.addAction(BootstrapService.BROADCAST_ERROR);
+        LocalBroadcastManager.getInstance(this).registerReceiver(bootstrapReceiver, bootstrapFilter);
+
         appendOutput("VoidTerm - Kali Linux Terminal for Android\r\n" +
                 "Type voidterm-help for usage.\r\n\r\n");
 
-        session.start();
+        if (EnvironmentManager.isBootstrapped()) {
+            String name = EnvironmentManager.getInstalledDistroName();
+            if (name != null) appendOutput("Environment: " + name + "\r\n\r\n");
+            session.start();
+        } else {
+            appendOutput(DistroCatalog.renderMenu());
+            awaitingDistroChoice = true;
+        }
 
         sendBtn.setOnClickListener(v -> submitInput());
         inputView.setOnEditorActionListener((v, actionId, event) -> {
@@ -69,6 +114,21 @@ public class TerminalActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    private void startDistroInstall(DistroCatalog.Distro distro) {
+        awaitingDistroChoice = false;
+        appendOutput("\r\nInstalling " + distro.displayName + "...\r\n" +
+                "This downloads a real Linux filesystem — it can take a while\r\n" +
+                "and needs a stable connection (roughly 100-400 MB).\r\n\r\n");
+
+        Intent intent = new Intent(this, BootstrapService.class);
+        intent.putExtra(BootstrapService.EXTRA_DISTRO_ID, distro.id);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent);
+        } else {
+            startService(intent);
+        }
     }
 
     private void requestNotificationPermissionIfNeeded() {
@@ -87,6 +147,11 @@ public class TerminalActivity extends AppCompatActivity {
         if (text.isEmpty()) return;
 
         appendOutput("$ " + text + "\r\n");
+
+        if (awaitingDistroChoice) {
+            handleDistroChoice(text.trim());
+            return;
+        }
 
         CommandProcessor.CommandResult result = CommandProcessor.process(text, this);
         switch (result.type) {
@@ -113,6 +178,22 @@ public class TerminalActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    private void handleDistroChoice(String input) {
+        int n;
+        try {
+            n = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            appendOutput("Please type a number from the list above.\r\n\r\n> ");
+            return;
+        }
+        DistroCatalog.Distro distro = DistroCatalog.byNumber(n);
+        if (distro == null) {
+            appendOutput("No distro with that number. Try again.\r\n\r\n> ");
+            return;
+        }
+        startDistroInstall(distro);
     }
 
     private void appendOutput(String text) {
@@ -151,6 +232,7 @@ public class TerminalActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(bootstrapReceiver);
         if (session != null) session.stop();
     }
 }
