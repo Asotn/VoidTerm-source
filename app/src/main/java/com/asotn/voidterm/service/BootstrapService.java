@@ -95,7 +95,7 @@ public class BootstrapService extends Service {
         broadcastStatus("Downloading " + distro.displayName + "...\n" + rootfsUrl);
         boolean ok = downloadFile(rootfsUrl, tarPath);
         if (!ok) {
-            broadcastError("Failed to download " + distro.displayName + " rootfs");
+            broadcastError("Failed to download " + distro.displayName + " rootfs\n\n" + lastDownloadError);
             return;
         }
 
@@ -106,7 +106,7 @@ public class BootstrapService extends Service {
         new File(EnvironmentManager.KALI_ROOTFS_DIR).mkdirs();
         ok = extractTarball(tarPath, EnvironmentManager.KALI_ROOTFS_DIR, ext);
         if (!ok) {
-            broadcastError("Failed to extract " + distro.displayName + " rootfs");
+            broadcastError("Failed to extract " + distro.displayName + " rootfs\n\n" + lastExtractError);
             return;
         }
 
@@ -143,50 +143,91 @@ public class BootstrapService extends Service {
     // -------------------------------------------------------------------------
     // downloadFile with progress
     // -------------------------------------------------------------------------
+    /** Set by downloadFile() so the caller can report the real failure reason. */
+    private String lastDownloadError = "";
+
     private boolean downloadFile(String urlStr, String destPath) {
+        return downloadFile(urlStr, destPath, 0);
+    }
+
+    private boolean downloadFile(String urlStr, String destPath, int redirectDepth) {
+        if (redirectDepth > 5) {
+            lastDownloadError = "Too many redirects";
+            return false;
+        }
+        HttpURLConnection conn = null;
         try {
             URL url = new URL(urlStr);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(30_000);
-            conn.setReadTimeout(60_000);
+            conn.setReadTimeout(120_000);
+            conn.setInstanceFollowRedirects(false); // handle manually so we can log the target
+            conn.setRequestProperty("User-Agent",
+                    "Mozilla/5.0 (Linux; Android) VoidTerm/26.2");
             conn.connect();
 
+            int code = conn.getResponseCode();
+
+            // Manual redirect handling (some mirrors 301/302 to a CDN host)
+            if (code == HttpURLConnection.HTTP_MOVED_PERM ||
+                code == HttpURLConnection.HTTP_MOVED_TEMP ||
+                code == 307 || code == 308) {
+                String location = conn.getHeaderField("Location");
+                conn.disconnect();
+                if (location == null) {
+                    lastDownloadError = "HTTP " + code + " redirect with no Location header";
+                    return false;
+                }
+                Log.i(TAG, "Redirect " + code + " -> " + location);
+                return downloadFile(location, destPath, redirectDepth + 1);
+            }
+
+            if (code != HttpURLConnection.HTTP_OK) {
+                lastDownloadError = "Server returned HTTP " + code + " for:\n" + urlStr;
+                conn.disconnect();
+                return false;
+            }
+
             int total = conn.getContentLength();
-            InputStream in = new BufferedInputStream(conn.getInputStream());
-            FileOutputStream out = new FileOutputStream(destPath);
+            try (InputStream in = new BufferedInputStream(conn.getInputStream());
+                 FileOutputStream out = new FileOutputStream(destPath)) {
 
-            byte[] buf = new byte[8192];
-            int downloaded = 0, n;
-            int lastPct = -1;
+                byte[] buf = new byte[8192];
+                int downloaded = 0, n;
+                int lastPct = -1;
 
-            while ((n = in.read(buf)) != -1) {
-                out.write(buf, 0, n);
-                downloaded += n;
+                while ((n = in.read(buf)) != -1) {
+                    out.write(buf, 0, n);
+                    downloaded += n;
 
-                if (total > 0) {
-                    int pct = (downloaded * 100) / total;
-                    if (pct != lastPct) {
-                        lastPct = pct;
-                        updateNotification("Downloading Kali rootfs: " + pct + "%", pct);
-                        broadcastProgress(pct, "Downloading: " + pct + "%");
+                    if (total > 0) {
+                        int pct = (downloaded * 100) / total;
+                        if (pct != lastPct) {
+                            lastPct = pct;
+                            updateNotification("Downloading: " + pct + "%", pct);
+                            broadcastProgress(pct, "Downloading: " + pct + "%");
+                        }
                     }
                 }
             }
 
-            out.close();
-            in.close();
-            conn.disconnect();
             Log.i(TAG, "Download complete: " + destPath);
             return true;
-        } catch (IOException e) {
-            Log.e(TAG, "Download failed: " + e.getMessage());
+        } catch (Exception e) {
+            lastDownloadError = e.getClass().getSimpleName() + ": " + e.getMessage()
+                    + "\nURL: " + urlStr;
+            Log.e(TAG, "Download failed: " + lastDownloadError);
             return false;
+        } finally {
+            if (conn != null) conn.disconnect();
         }
     }
 
     // -------------------------------------------------------------------------
     // extractTarball
     // -------------------------------------------------------------------------
+    private String lastExtractError = "";
+
     private boolean extractTarball(String tarPath, String destDir, String ext) {
         try {
             String flag = ext.equals(".tar.xz") ? "-xJf" : "-xzf";
@@ -200,9 +241,33 @@ public class BootstrapService extends Service {
             pb.directory(new File(destDir));
             pb.redirectErrorStream(true);
             Process p = pb.start();
+
+            // IMPORTANT: the output stream MUST be drained while the process
+            // runs, or a large amount of tar output can fill the OS pipe
+            // buffer and deadlock both the child (blocked writing) and this
+            // thread (blocked in waitFor()).
+            StringBuilder outputLog = new StringBuilder();
+            Thread drain = new Thread(() -> {
+                try (java.io.BufferedReader r = new java.io.BufferedReader(
+                        new java.io.InputStreamReader(p.getInputStream()))) {
+                    String line;
+                    while ((line = r.readLine()) != null) {
+                        outputLog.append(line).append('\n');
+                        if (outputLog.length() > 4000) {
+                            outputLog.delete(0, outputLog.length() - 4000); // keep tail only
+                        }
+                    }
+                } catch (IOException ignored) { }
+            }, "tar-output-drain");
+            drain.start();
+
             int exit = p.waitFor();
+            drain.join(2000);
+
             if (exit != 0) {
-                Log.e(TAG, "tar extraction failed with code " + exit);
+                lastExtractError = "tar exited with code " + exit + "\n" +
+                        tail(outputLog.toString(), 600);
+                Log.e(TAG, "tar extraction failed: " + lastExtractError);
                 return false;
             }
             // Delete tarball to save space
@@ -210,9 +275,15 @@ public class BootstrapService extends Service {
             Log.i(TAG, "Rootfs extracted to " + destDir);
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "Extraction exception: " + e.getMessage());
+            lastExtractError = e.getClass().getSimpleName() + ": " + e.getMessage();
+            Log.e(TAG, "Extraction exception: " + lastExtractError);
             return false;
         }
+    }
+
+    private static String tail(String s, int maxChars) {
+        if (s.length() <= maxChars) return s;
+        return "...\n" + s.substring(s.length() - maxChars);
     }
 
     // -------------------------------------------------------------------------
