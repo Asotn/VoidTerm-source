@@ -40,16 +40,30 @@ android {
         }
     }
 
+    signingConfigs {
+        // Fixed signing key committed to the repo. Every CI build uses this
+        // SAME key, so a new APK can install over an older one without
+        // uninstalling first. This is NOT a production release key — it's
+        // a project-wide debug/dev key, safe to keep in a public repo.
+        voidterm {
+            storeFile file("../keystore/voidterm-debug.keystore")
+            storePassword "voidterm123"
+            keyAlias "voidterm"
+            keyPassword "voidterm123"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.voidterm
         }
         debug {
             debuggable true
             minifyEnabled false
+            signingConfig signingConfigs.voidterm
         }
     }
 

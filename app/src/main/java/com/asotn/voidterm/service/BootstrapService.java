@@ -201,7 +201,9 @@ public class BootstrapService extends Service {
                     downloaded += n;
 
                     if (total > 0) {
-                        int pct = (downloaded * 100) / total;
+                        int pct = (int) ((downloaded * 100L) / total);
+                        if (pct < 0) pct = 0;
+                        if (pct > 100) pct = 100;
                         if (pct != lastPct) {
                             lastPct = pct;
                             updateNotification("Downloading: " + pct + "%", pct);
