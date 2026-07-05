@@ -47,8 +47,8 @@ public final class DistroCatalog {
     private static final List<Distro> DISTROS = new ArrayList<>();
     static {
         DISTROS.add(new Distro(1, "kali", "Kali Linux",
-                map("arm64", "https://images.kali.org/nethunter/rootfs/kalifs-arm64-minimal.tar.xz",
-                    "armhf", "https://images.kali.org/nethunter/rootfs/kalifs-armhf-minimal.tar.xz"),
+                map("arm64", "https://kali.download/nethunter-images/current/rootfs/kali-nethunter-rootfs-minimal-arm64.tar.xz",
+                    "armhf", "https://kali.download/nethunter-images/current/rootfs/kali-nethunter-rootfs-minimal-armhf.tar.xz"),
                 true));
 
         DISTROS.add(new Distro(2, "ubuntu", "Ubuntu 22.04 (Jammy)",
@@ -62,8 +62,8 @@ public final class DistroCatalog {
                 true));
 
         DISTROS.add(new Distro(4, "archlinux", "Arch Linux ARM",
-                map("arm64", "https://archlinuxarm.org/os/ArchLinuxARM-aarch64-latest.tar.gz",
-                    "armhf", "https://archlinuxarm.org/os/ArchLinuxARM-armv7-latest.tar.gz"),
+                map("arm64", "https://ca.us.mirror.archlinuxarm.org/os/ArchLinuxARM-aarch64-latest.tar.gz",
+                    "armhf", "https://ca.us.mirror.archlinuxarm.org/os/ArchLinuxARM-armv7-latest.tar.gz"),
                 true));
 
         DISTROS.add(new Distro(5, "alpine", "Alpine Linux 3.19 (lightweight)",

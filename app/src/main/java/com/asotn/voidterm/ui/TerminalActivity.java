@@ -65,7 +65,9 @@ public class TerminalActivity extends AppCompatActivity {
                     awaitingDistroChoice = true;
                     break;
                 case BootstrapService.BROADCAST_DONE:
-                    appendOutput("\r\nStarting shell...\r\n\r\n");
+                    appendOutput("\r\nSwitching to " +
+                            EnvironmentManager.getInstalledDistroName() + " shell...\r\n\r\n");
+                    session.stop();
                     session.start();
                     break;
             }
@@ -99,11 +101,15 @@ public class TerminalActivity extends AppCompatActivity {
         if (EnvironmentManager.isBootstrapped()) {
             String name = EnvironmentManager.getInstalledDistroName();
             if (name != null) appendOutput("Environment: " + name + "\r\n\r\n");
-            session.start();
         } else {
-            appendOutput(DistroCatalog.renderMenu());
-            awaitingDistroChoice = true;
+            appendOutput(DistroCatalog.renderMenu() +
+                    "\r\n(You can also use this as a plain Android shell right now —\r\n" +
+                    " type any command, or a number above to install a distro.)\r\n\r\n");
+            awaitingDistroChoice = true; // only intercepts pure numeric input, see submitInput()
         }
+        // The basic Android shell is available immediately either way, so
+        // the app is never blocked waiting on a distro install.
+        session.start();
 
         sendBtn.setOnClickListener(v -> submitInput());
         inputView.setOnEditorActionListener((v, actionId, event) -> {
@@ -148,7 +154,7 @@ public class TerminalActivity extends AppCompatActivity {
 
         appendOutput("$ " + text + "\r\n");
 
-        if (awaitingDistroChoice) {
+        if (awaitingDistroChoice && text.trim().matches("\\d+")) {
             handleDistroChoice(text.trim());
             return;
         }

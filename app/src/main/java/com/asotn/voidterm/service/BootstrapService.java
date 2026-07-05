@@ -86,6 +86,11 @@ public class BootstrapService extends Service {
         if (!prootFile.canExecute()) prootFile.setExecutable(true, false);
         if (!busyboxFile.canExecute()) busyboxFile.setExecutable(true, false);
 
+        // Pre-flight diagnostic: actually run busybox on THIS device and
+        // report what really happens, instead of assuming. This is the
+        // single most useful line of output when something goes wrong.
+        broadcastStatus(runDiagnostic(busyboxFile));
+
         // Step 2: Download the chosen distro's rootfs tarball
         String archKey = kaliArchToKey(EnvironmentManager.getKaliArch());
         String rootfsUrl = distro.urlFor(archKey);
@@ -283,9 +288,55 @@ public class BootstrapService extends Service {
         }
     }
 
-    private static String tail(String s, int maxChars) {
-        if (s.length() <= maxChars) return s;
-        return "...\n" + s.substring(s.length() - maxChars);
+    /** Actually runs busybox on THIS device and reports the real outcome —
+     *  file size, whether it executes at all, and whether the tar applet
+     *  responds — instead of assuming the binary works. */
+    private String runDiagnostic(File busyboxFile) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Busybox binary: ").append(busyboxFile.length()).append(" bytes, ")
+          .append("executable=").append(busyboxFile.canExecute()).append('\n');
+        try {
+            Process p = new ProcessBuilder(busyboxFile.getAbsolutePath())
+                    .redirectErrorStream(true).start();
+            String banner = readAllQuick(p, 2000);
+            p.waitFor();
+            sb.append("Runs OK: ").append(firstLine(banner)).append('\n');
+        } catch (Exception e) {
+            sb.append("FAILED TO EXECUTE: ")
+              .append(e.getClass().getSimpleName()).append(": ").append(e.getMessage()).append('\n');
+            return sb.toString();
+        }
+        try {
+            Process p = new ProcessBuilder(busyboxFile.getAbsolutePath(), "tar", "--help")
+                    .redirectErrorStream(true).start();
+            String out = readAllQuick(p, 2000);
+            p.waitFor();
+            boolean hasTar = out.toLowerCase().contains("usage: tar");
+            sb.append("tar applet: ").append(hasTar ? "OK" : "MISSING (" + firstLine(out) + ")");
+        } catch (Exception e) {
+            sb.append("tar applet check FAILED: ").append(e.getMessage());
+        }
+        return sb.toString();
+    }
+
+    private static String readAllQuick(Process p, int timeoutMs) throws Exception {
+        StringBuilder out = new StringBuilder();
+        try (java.io.BufferedReader r = new java.io.BufferedReader(
+                new java.io.InputStreamReader(p.getInputStream()))) {
+            long deadline = System.currentTimeMillis() + timeoutMs;
+            String line;
+            while (System.currentTimeMillis() < deadline && (line = r.readLine()) != null) {
+                out.append(line).append('\n');
+                if (out.length() > 500) break;
+            }
+        }
+        return out.toString();
+    }
+
+    private static String firstLine(String s) {
+        if (s == null || s.isEmpty()) return "(no output)";
+        int i = s.indexOf('\n');
+        return i == -1 ? s : s.substring(0, i);
     }
 
     // -------------------------------------------------------------------------
