@@ -76,11 +76,36 @@ public class BootstrapService extends Service {
         // Step 1: Verify proot/busybox are present. These now ship as real
         // native libraries (jniLibs) that Android extracts + chmod +x at
         // install time, so no runtime extraction is needed at all.
-        broadcastStatus("Extracting runtime binaries (proot/busybox)...");
-        String extractErr = EnvironmentManager.ensureRuntimeBinaries();
-        if (extractErr != null) {
-            broadcastError("Failed to set up proot/busybox\n\n" + extractErr);
-            return;
+        // Step 1: Download proot/busybox/loader directly from the internet
+        // (NOT bundled in the APK). Every in-APK packaging approach we
+        // tried got corrupted somewhere in Android's build pipeline; a
+        // fresh HTTPS download lands on the device with zero Gradle/AGP
+        // involvement, so this is the most reliable option.
+        if (!EnvironmentManager.runtimeBinariesReady()) {
+            java.util.Map<String, String> urls = EnvironmentManager.runtimeBinaryUrls();
+            if (urls == null) {
+                broadcastError("Unsupported CPU architecture for this device.");
+                return;
+            }
+            new File(EnvironmentManager.BIN_DIR).mkdirs();
+
+            String[][] targets = {
+                {"proot",       urls.get("proot"),       EnvironmentManager.PROOT_BIN},
+                {"prootloader", urls.get("prootloader"), EnvironmentManager.PROOT_LOADER_BIN},
+                {"busybox",     urls.get("busybox"),     EnvironmentManager.BUSYBOX_BIN},
+            };
+            for (String[] t : targets) {
+                broadcastStatus("Downloading " + t[0] + "...");
+                if (!downloadFile(t[1], t[2])) {
+                    broadcastError("Failed to download " + t[0] + "\n\n" + lastDownloadError);
+                    return;
+                }
+                File f = new File(t[2]);
+                if (!f.setExecutable(true, false)) {
+                    broadcastError("Downloaded " + t[0] + " but couldn't make it executable.");
+                    return;
+                }
+            }
         }
         File busyboxFile = new File(EnvironmentManager.BUSYBOX_BIN);
 

@@ -17,9 +17,6 @@ import android.os.Build;
 import android.util.Log;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -184,63 +181,41 @@ public final class EnvironmentManager {
     // -------------------------------------------------------------------
 
     /**
-     * Extracts proot/busybox/prootloader from assets/bin/<abi>/ to BIN_DIR
-     * and marks them executable, if not already done. Assets are stored
-     * as plain opaque blobs by AAPT — nothing in the Android build
-     * pipeline strips, compresses-in-place, or otherwise rewrites their
-     * bytes, so this is byte-for-byte reliable regardless of Gradle/AGP
-     * version (unlike the jniLibs "rename as .so" trick, which AGP's
-     * native-library processing can silently corrupt).
+     * proot/busybox no longer ship inside the APK at all. Every packaging
+     * strategy we tried (assets extraction, jniLibs "rename as .so") was
+     * either blocked or silently corrupted these binaries somewhere in
+     * Android's build pipeline. Instead, BootstrapService downloads them
+     * directly from their upstream source over HTTPS on first run — the
+     * exact same bytes verified working, with zero Gradle/AGP involvement.
      *
-     * Returns null on success, or a human-readable error string.
+     * Returns {"proot": url, "busybox": url, "prootloader": url} for this
+     * device's CPU architecture, or null if unsupported (x86/x86_64).
      */
-    public static synchronized String ensureRuntimeBinaries() {
+    public static java.util.Map<String, String> runtimeBinaryUrls() {
+        boolean isArm64 = false, isArm32 = false;
+        for (String abi : Build.SUPPORTED_ABIS) {
+            if (abi.equals("arm64-v8a")) isArm64 = true;
+            if (abi.equals("armeabi-v7a") || abi.equals("armeabi")) isArm32 = true;
+        }
+        if (!isArm64 && !isArm32) return null;
+
+        java.util.Map<String, String> m = new java.util.LinkedHashMap<>();
+        // proot/loader are 32-bit ARM but run fine on both arm and arm64
+        // Android devices (kernel-level 32-bit compat) — one build covers both.
+        m.put("proot", "https://raw.githubusercontent.com/ZhymabekRoman/proot-static/main/bin/proot");
+        m.put("prootloader", "https://raw.githubusercontent.com/ZhymabekRoman/proot-static/main/bin/loader");
+        m.put("busybox", isArm64
+                ? "https://raw.githubusercontent.com/ARM-software/devlib/master/devlib/bin/arm64/busybox"
+                : "https://raw.githubusercontent.com/ARM-software/devlib/master/devlib/bin/armeabi/busybox");
+        return m;
+    }
+
+    /** True once proot/busybox/loader are present on disk and executable. */
+    public static boolean runtimeBinariesReady() {
         File proot = new File(PROOT_BIN);
         File busybox = new File(BUSYBOX_BIN);
         File loader = new File(PROOT_LOADER_BIN);
-
-        if (proot.exists() && busybox.exists() && loader.exists()
-                && proot.canExecute() && busybox.canExecute()) {
-            return null; // already extracted this install
-        }
-
-        String abiDir = pickAssetAbiDir();
-        if (abiDir == null) {
-            return "Unsupported CPU architecture: " + String.join(",", Build.SUPPORTED_ABIS);
-        }
-
-        new File(BIN_DIR).mkdirs();
-        String base = "bin/" + abiDir + "/";
-        String err;
-        if ((err = extractAssetFile(base + "proot", PROOT_BIN)) != null) return err;
-        if ((err = extractAssetFile(base + "busybox", BUSYBOX_BIN)) != null) return err;
-        if ((err = extractAssetFile(base + "prootloader", PROOT_LOADER_BIN)) != null) return err;
-        return null;
-    }
-
-    private static String pickAssetAbiDir() {
-        for (String abi : Build.SUPPORTED_ABIS) {
-            if (abi.equals("arm64-v8a")) return "arm64-v8a";
-        }
-        for (String abi : Build.SUPPORTED_ABIS) {
-            if (abi.equals("armeabi-v7a") || abi.equals("armeabi")) return "armeabi-v7a";
-        }
-        return null; // x86/x86_64 devices aren't supported by our proot/busybox builds
-    }
-
-    private static String extractAssetFile(String assetPath, String destPath) {
-        File dest = new File(destPath);
-        try (InputStream in = appContext.getAssets().open(assetPath);
-             FileOutputStream out = new FileOutputStream(dest)) {
-            byte[] buf = new byte[65536];
-            int n;
-            while ((n = in.read(buf)) != -1) out.write(buf, 0, n);
-        } catch (IOException e) {
-            return "Failed to extract " + assetPath + ": " + e.getMessage();
-        }
-        if (!dest.setExecutable(true, false)) {
-            return "Failed to make " + destPath + " executable (chmod denied)";
-        }
-        return null;
+        return proot.exists() && busybox.exists() && loader.exists()
+                && proot.canExecute() && busybox.canExecute() && loader.canExecute();
     }
 }
