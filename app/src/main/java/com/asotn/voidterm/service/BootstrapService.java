@@ -339,6 +339,11 @@ public class BootstrapService extends Service {
         return i == -1 ? s : s.substring(0, i);
     }
 
+    private static String tail(String s, int maxChars) {
+        if (s == null || s.length() <= maxChars) return s;
+        return "...\n" + s.substring(s.length() - maxChars);
+    }
+
     // -------------------------------------------------------------------------
     // writeResolvConf
     // -------------------------------------------------------------------------
