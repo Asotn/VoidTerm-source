@@ -80,6 +80,14 @@ android {
     packagingOptions {
         jniLibs {
             useLegacyPackaging true
+            // proot/busybox are prebuilt STATIC EXECUTABLES, not real
+            // compiled shared libraries — they only live under jniLibs/
+            // as a trick to get Android to install them with the +x bit
+            // guaranteed. AGP's native-lib strip step assumes real .so
+            // build outputs and can corrupt these when it "cleans" them
+            // (this silently broke busybox's applet table before). Keep
+            // them completely untouched.
+            keepDebugSymbols += ["**/libproot.so", "**/libprootloader.so", "**/libbusybox.so"]
         }
     }
 
