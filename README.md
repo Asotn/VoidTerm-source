@@ -1,6 +1,3 @@
-Okay, yes, the project will be back online on September 24th, 2026 – that's tomorrow. In short, the first version will be released. We will be changing the release system. You probably won't read this message.
-
-The release system will change drastically, as will the application's interface and functionality. Much code will be deleted, minimum system requirements will be reduced, and the graphical interface will be greatly improved. 
 
 # VoidTerm 
 
